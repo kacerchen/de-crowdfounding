@@ -178,6 +178,11 @@ class Sidebar extends Component {
                     <IntlMessages id="sidebar.cards" />
                   </Link>
                 </Menu.Item>
+                <Menu.Item style={submenuStyle} key="project">
+                  <Link style={submenuColor} to={`${url}/project`}>
+                    <IntlMessages id="sidebar.projects" />
+                  </Link>
+                </Menu.Item>
               </SubMenu>
 
               <SubMenu

@@ -15,8 +15,8 @@ const themeConfig = {
 };
 const language = 'english';
 const AlgoliaSearchConfig = {
-  appId: '',
-  apiKey: '',
+  appId: 'B2U28MOVQT',
+  apiKey: '9a0e2fe501f01035813b4bb344f911ce',
 };
 const Auth0Config = {
   domain: '',
