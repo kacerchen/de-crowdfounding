@@ -318,8 +318,18 @@ class AppRouter extends React.Component {
         />
         <Route
           exact
+          path={`${url}/project/:id`}
+          component={asyncComponent(() => import('../Ecommerce/projectPage'))}
+        />
+        <Route
+          exact
           path={`${url}/showcase`}
           component={asyncComponent(() => import('../Ecommerce/showcase'))}
+        />
+        <Route
+          exact
+          path={`${url}/showcase/:id`}
+          component={asyncComponent(() => import('../Ecommerce/showcasePage'))}
         />
         <Route
           exact

@@ -28,7 +28,9 @@ class Projects extends Component {
         this.handleCancel = this.handleCancel.bind(this);
         this.renderDatePicker = this.renderDatePicker.bind(this);
 
-        this.columns = createColumns(this.editColumn, this.props.deleteCard);
+        const url = this.props.location.pathname;
+
+        this.columns = createColumns(this.editColumn, this.props.deleteCard, url);
 
         this.state = {
             editView: false,
@@ -54,6 +56,8 @@ class Projects extends Component {
             key: new Date().getTime(),
             name: '',
             description: '',
+            videourl: '',
+            balance: '0',
             goalamount: '',
             currency: '',
             projectaccount: '',

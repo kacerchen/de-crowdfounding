@@ -1,6 +1,7 @@
 import React from 'react';
-import { DeleteCell } from '../../Tables/antTables/helperCells';
-function createColumns(editColumn, deleteColumn) {
+import { DeleteCell, EditableCell, EditCell } from '../../Tables/antTables/helperCells';
+import moment from 'moment';
+function createColumns(editColumn, deleteColumn, url) {
   return [
     {
       title: 'Project Name',
@@ -11,6 +12,16 @@ function createColumns(editColumn, deleteColumn) {
       title: 'Description',
       dataIndex: 'description',
       rowKey: 'description'
+    },
+    {
+      title: 'Video',
+      dataIndex: 'videourl',
+      rowKey: 'videourl'
+    },
+    {
+      title: 'Current Balance',
+      dataIndex: 'balance',
+      rowKey: 'balance'
     },
     {
       title: 'Goal Amount',
@@ -42,6 +53,17 @@ function createColumns(editColumn, deleteColumn) {
       rowKey: 'action',
       render: (text, record) =>
         <span>
+          <EditCell
+            project={record}
+            linkto={url}
+          />
+        </span>
+    },
+    {
+      title: '',
+      rowKey: 'action',
+      render: (text, record) =>
+        <span>
           <DeleteCell
             onDeleteCell={() => {
               deleteColumn(record);
@@ -58,33 +80,39 @@ const fakedata = [
     key: 1,
     name: 'Project A',
     description: 'Nulla vitae elit libero, a pharetra augue.',
+    videourl: 'https://www.youtube.com/embed/EngW7tLk6R8',
+    balance: '1900',
     goalamount: '30000',
     currency: 'USD',
     projectaccount: '**************************',
-    startDate: '11/08/2020',
-    endDate: '12/31/2020'
+    startDate: moment("20201108", "YYYYMMDD"),
+    endDate: moment("20201231", "YYYYMMDD")
   },
   {
     id: 2,
     key: 2,
     name: 'Project B',
     description: 'Nullam id dolor id nibh ultricies vehicula ut id elit.',
+    videourl: 'https://www.youtube.com/embed/HjxYvcdpVnU',
+    balance: '5000',
     goalamount: '10000',
     currency: 'ALGO',
     projectaccount: '**************************',
-    startDate: '11/08/2020',
-    endDate: '01/31/2021'
+    startDate: moment("20201108", "YYYYMMDD"),
+    endDate: moment("20210121", "YYYYMMDD")
   },
   {
     id: 1,
     key: 3,
     name: 'Project C',
     description: 'Nulla vitae elit libero, a pharetra augue.',
+    videourl: 'https://www.youtube.com/embed/K4TOrB7at0Y',
+    balance: '30000',
     goalamount: '5000',
     currency: 'USDC',
     projectaccount: '**************************',
-    startDate: '11/08/2020',
-    endDate: '02/10/2021'
+    startDate: moment("20201108", "YYYYMMDD"),
+    endDate: moment("20201210", "YYYYMMDD")
   }
 ];
 export { createColumns, fakedata };

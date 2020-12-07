@@ -142,6 +142,18 @@ export default class extends Component {
                   />
 
                   <InputField
+                      placeholder='Video Link'
+                      type="text"
+                      className={`videourl`}
+                      onChange={event => {
+                          selectedProject['videourl'] = event.target.value;
+                          updateProject(selectedProject);
+                      }}
+                      name='videourl'
+                      key='2'
+                  />
+
+                  <InputField
                     placeholder='Goal Amount'
                     type="text"
                     className={`goalamount`}
@@ -150,7 +162,7 @@ export default class extends Component {
                         updateProject(selectedProject);
                     }}
                     name='goalamount'
-                    key='2'
+                    key='3'
                     addonBefore="$"
                     addonAfter={selectAfter(selectedProject, updateProject)}
                   />

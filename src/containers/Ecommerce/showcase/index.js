@@ -4,11 +4,22 @@ import { Row, Col } from 'antd';
 import clone from 'clone';
 import PageHeader from '../../../components/utility/pageHeader';
 import Box from '../../../components/utility/box';
+import Progress from '../../../components/uielements/progress';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import ContentHolder from '../../../components/utility/contentHolder';
 import basicStyle from '../../../config/basicStyle';
 import IntlMessages from '../../../components/utility/intlMessages';
 import Card from '../../Uielements/Card/card.style';
+import card from '../../../components/card';
+import { rtl } from '../../../config/withDirection';
+import { size } from 'styled-theme';
+import moment from 'moment';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 class Showcases extends Component {
 
@@ -43,33 +54,72 @@ class Showcases extends Component {
       return tempArray;
     }
 
+    calculatePercentage(curBalance, goalAmout) {
+      let b = Number(curBalance);
+      let g = Number(goalAmout);
+      let percentage = (b/ g) * 100; 
+      return percentage.toFixed();
+    }
+
+    calculateLeftDays(momentStr) {
+      let dateObj = new Date(momentStr);
+      let momentObj = moment(dateObj);
+      return momentObj.endOf('day').fromNow();
+    }
+
     render() {
+      const url = this.props.location.pathname;
       const { rowStyle, colStyle, gutter } = basicStyle;
+      const marginStyle = {
+        margin: rtl === 'rtl' ? '0 0 10px 10px' : '0 10px 10px 0',
+      };
+      const fontStyle = `{
+        font-size: 25px;
+      }`
       const cards = this.dateToString(clone(this.props.cards));
       const cards_jsx = [];
       for(let i = 0; i < cards.length; i++){
+        let p = this.calculatePercentage(cards[i].balance, cards[i].goalamount);
+        let bar = p >= 100 ? <Progress percent={100} style={marginStyle} /> :
+        <Progress percent={p} status="active" style={marginStyle} />;
+
         cards_jsx.push(
             <Col md={8} sm={8} xs={24} style={colStyle}>
               <ContentHolder>
-                <Card bodyStyle={{ padding: 0 }}>
-                  <div className="custom-image">
-                  <iframe 
-                    width="100%" 
-                    height="315" 
-                    src="https://www.youtube.com/embed/tgbNymZ7vqY" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; 
-                    encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                  </iframe>
-                  </div>
-                  <div className="custom-card">
-                    <h3>
-                      {<IntlMessages id={cards[i].name} />}
-                    </h3>
-                    <p>{<IntlMessages id={cards[i].description} />}</p>
-                  </div>
-                </Card>
+                <Link to={`${url}/${cards[i].id}`}>
+                  <Card bodyStyle={{ padding: 0 }}>
+                    <div className="custom-image">
+                    <iframe 
+                      width="100%" 
+                      height="315" 
+                      src={cards[i].videourl} 
+                      frameborder="0" 
+                      allow="accelerometer; autoplay; clipboard-write; 
+                      encrypted-media; gyroscope; picture-in-picture" 
+                      allowfullscreen>
+                    </iframe>
+                    </div>
+                    <div className="custom-card">
+                      <h2>
+                        {<IntlMessages id={cards[i].name} />}
+                      </h2>
+                      <p>{<IntlMessages id={cards[i].description} />}</p>
+                      <p>
+                        <span>
+                          <b style={{"font-size": "20px", "color": "#4f4e4e"}}>
+                            {<IntlMessages id={"$" + cards[i].balance + " "} />}
+                          </b>
+                          {<IntlMessages id={cards[i].currency} />} raised
+                        </span>
+                      </p>
+                      {bar}
+                      <p>
+                        <span class="material-icons" style={{"font-size": "16px"}}>watch_later</span>
+                        {<IntlMessages id={" Will close " + this.calculateLeftDays(cards[i].endDate)} />}
+                      </p>
+                    </div>
+                  </Card>
+                </Link>
               </ContentHolder>
             </Col>
         );

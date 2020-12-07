@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import ImageCellView from './imageCell';
 import { Icon, Input, Popconfirm } from 'antd';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 const DateCell = data => <p>{data.toLocaleString()}</p>;
 const ImageCell = src => <ImageCellView src={src} />;
@@ -56,6 +62,23 @@ class EditableCell extends Component {
     );
   }
 }
+
+class EditCell extends Component {
+  render() {
+    const { project, linkto } = this.props;
+    
+    return (
+      <div className="isoEditData">
+        <p className="isoDataWrapper">
+        <Link to={`${linkto}/${project.id}`}>
+          <Icon type="edit" className="isoEditIcon" />
+        </Link>
+        </p>
+      </div>
+    )
+  }
+}
+
 class DeleteCell extends Component {
   render() {
     const { index, onDeleteCell } = this.props;
@@ -72,4 +95,4 @@ class DeleteCell extends Component {
   }
 }
 
-export { DateCell, ImageCell, LinkCell, TextCell, EditableCell, DeleteCell };
+export { DateCell, ImageCell, LinkCell, TextCell, EditableCell, DeleteCell, EditCell };
