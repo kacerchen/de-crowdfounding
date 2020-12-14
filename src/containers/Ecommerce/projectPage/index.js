@@ -13,11 +13,13 @@ import basicStyle from '../../../config/basicStyle';
 import Tags from '../../../components/uielements/tag';
 import TagWrapper from '../../Uielements/Tag/tag.style';
 import ContentHolder from '../../../components/utility/contentHolder';
+import IntlMessages from '../../../components/utility/intlMessages';
 import Async from '../../../helpers/asyncComponent';
 import Button, { ButtonGroup } from '../../../components/uielements/button';
 import {
     DateRangePicker,
 } from '../../../components/uielements/reactDates';
+import cardActions from '../../../redux/project/actions';
 // import { useParams } from 'react-router-dom';
 
 const Option = SelectOption;
@@ -50,6 +52,8 @@ const selectAfter = (selectedProject, updateProject) => {
     </Select>
 };
 
+const { addCard, editCard, deleteCard, restoreCards } = cardActions;
+
 class ProjectPage extends Component {
 
     constructor(props) {
@@ -62,50 +66,7 @@ class ProjectPage extends Component {
             loading: false,
             iconLoading: false,
         };
-    }
-
-    updateProject(selectedProject) {
-        this.setState({ selectedProject });
-    }
-
-    renderDatePicker() {
-        const {
-            selectedProject,
-        } = this.props;
-
-        let startDate = selectedProject.startDate;
-        let endDate = selectedProject.endDate;
-        let focusedInput = selectedProject.focusedInput;
-
-        let options = {
-          startDate: selectedProject.startDate,
-          endDate: selectedProject.endDate,
-          startDateId: "your_unique_start_date_id",
-          endDateId: "your_unique_end_date_id",
-          onDatesChange: ({ startDate, endDate }) => {
-              selectedProject.startDate = startDate // ? startDate.locale('pl').format('LLLL') : null
-              selectedProject.endDate = endDate // ? endDate.locale('pl').format('LLLL')  : null
-              this.setState(selectedProject)
-          },
-          focusedInput: selectedProject.focusedInput,
-          onFocusChange:(focusedInput) => {
-            selectedProject.focusedInput = focusedInput;
-            this.setState(selectedProject)
-          },
-        }
-
-        this.state.configsValue[0].options.forEach(option => {
-          options[option.id] = option.value;
-        });
-        
-        // if (this.props.view === 'MobileView') {
-        //   options.numberOfMonths = 1;
-        // }
-        return (
-          <div className="isoReactDate">
-            {<DateRangePicker isOutsideRange={() => false} {...options} />}
-          </div>
-        );
+        this.updateProject = this.updateProject.bind(this);
     }
 
     uploadCallback(file) {
@@ -129,8 +90,13 @@ class ProjectPage extends Component {
         );
     }
 
-    enterIconLoading = () => {
-        this.setState({ iconLoading: true });
+    updateProject(selectedProject) {
+        this.setState({ selectedProject });
+    }
+
+    saveUpdates = () => {
+        // this.setState({ iconLoading: true });
+        editCard(this.selectedProject);
     };
 
     render() {
@@ -153,13 +119,14 @@ class ProjectPage extends Component {
         return (
             <LayoutContentWrapper style={{ height: '100%' }}>
                 <LayoutContent>
-                <h3>Project id: {id}</h3>
+                <h3 style={{"color": "#999999"}}>Project id: {id}</h3>
 
                 <Row style={rowStyle} gutter={gutter} justify="start">
                     <Col md={12} sm={12} xs={24} style={colStyle}>
                         <CardInfoWrapper id={containerId} className="isoCardWrapper" />
                             <InfoFormWrapper>
                                 <Form className="isoCardInfoForm">
+                                    <h4>Project Name: </h4>
                                     <InputField
                                         placeholder={selectedProject.name}
                                         type="text"
@@ -172,6 +139,7 @@ class ProjectPage extends Component {
                                         key='0'
                                     />
 
+                                    <h4>Description: </h4>
                                     <TextArea
                                         placeholder={selectedProject.description}
                                         type="text"
@@ -184,6 +152,7 @@ class ProjectPage extends Component {
                                         key='1'
                                     />
 
+                                    <h4>Video URL: </h4>
                                     <InputField
                                         placeholder={selectedProject.videourl}
                                         type="text"
@@ -196,36 +165,7 @@ class ProjectPage extends Component {
                                         key='2'
                                     />
 
-                                    <InputField
-                                        placeholder={selectedProject.goalamount}
-                                        type="text"
-                                        className={`goalamount`}
-                                        style={{"margin-top": "6px"}}
-                                        onChange={event => {
-                                            selectedProject['goalamount'] = event.target.value;
-                                            this.updateProject(selectedProject);
-                                        }}
-                                        name='goalamount'
-                                        key='3'
-                                        addonBefore="$"
-                                        addonAfter={selectAfter(selectedProject, this.updateProject)}
-                                    />
-
-                                    <InputField
-                                        placeholder={selectedProject.projectaccount}
-                                        type="text"
-                                        className={`isoAccountInput projectaccount`}
-                                        onChange={event => {
-                                            selectedProject['projectaccount'] = event.target.value;
-                                            this.updateProject(selectedProject);
-                                        }}
-                                        name='projectaccount'
-                                        key='4'
-                                    />
-
-                                    <div className='isoAccountInput'>
-                                        {this.renderDatePicker()}
-                                    </div>
+                                    
 
                                 </Form>
                             </InfoFormWrapper>
@@ -244,7 +184,10 @@ class ProjectPage extends Component {
                     <Row style={rowStyle} gutter={gutter} justify="start">
                         <Col>
                             <ContentHolder>
-                                <Editor {...editorOption} />
+                                <Editor {...editorOption}
+                                    selectedProject={selectedProject}
+                                    updateProject={this.updateProject}
+                                />
                             </ContentHolder>
                         </Col>
                     </Row>
@@ -254,12 +197,11 @@ class ProjectPage extends Component {
                         <Col md={8} sm={8} xs={24} style={{"margin": "6% 0 3% 0"}}>
                             <Button
                                 type="primary"
-                                // icon="update"
-                                loading={this.state.iconLoading}
-                                onClick={this.enterIconLoading}
+                                icon="save"
+                                // loading={this.state.iconLoading}
+                                onClick={this.saveUpdates}
                                 >
-                            <span class="material-icons" style={{"font-size": "18px", "margin-top": "10%"}}>update</span>
-                            Update
+                            Save
                             </Button>
                         </Col>
                     </Row>
@@ -283,4 +225,9 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(ProjectPage);
+export default connect(mapStateToProps, {
+    addCard,
+    editCard,
+    deleteCard,
+    restoreCards,
+})(ProjectPage);

@@ -62,6 +62,8 @@ class Projects extends Component {
             currency: '',
             projectaccount: '',
             timelimit: '',
+            additional: '',
+            investors: [],
             startDate: null,
             endDate: null,
             focusedInput: null,

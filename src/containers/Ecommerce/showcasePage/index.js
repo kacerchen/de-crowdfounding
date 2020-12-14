@@ -8,12 +8,29 @@ import { CardInfoWrapper, InfoFormWrapper } from '../../../components/project/pr
 import IntlMessages from '../../../components/utility/intlMessages';
 import Progress from '../../../components/uielements/progress';
 import { rtl } from '../../../config/withDirection';
+import Button, { ButtonGroup } from '../../../components/uielements/button';
+import { Icon } from 'antd';
+import Tabs, { TabPane } from '../../../components/uielements/tabs';
+import { ButtonWrapper } from '../../../components/card/cardModal.style';
+import Card from '../../../components/paybox';
+import cardActions from '../../../redux/project/actions';
 // import { useParams } from 'react-router-dom';
 
+const { addCard, editCard, deleteCard, restoreCards } = cardActions;
 class ShowcasePage extends Component {
 
     constructor(props) {
       super(props);
+
+      this.state = {
+        modalType: '',
+        editView: false,
+        paybox: null
+      }
+
+      this.updateProject = this.updateProject.bind(this);
+      this.handleCancel = this.handleCancel.bind(this);
+      this.openPayBox = this.openPayBox.bind(this);
     }
 
     calculatePercentage(curBalance, goalAmout) {
@@ -34,8 +51,33 @@ class ShowcasePage extends Component {
       return project;
     }
 
+    openPayBox() {
+      this.setState({
+        editView: true,
+        modalType: 'add',
+        paybox: {
+          accountholder: '',
+          amount: ''
+        }
+      });
+    }
+
+    handleCancel() {
+      this.setState({
+        editView: false,
+        paybox: null,
+      });
+    }
+
+    updateProject(selectedProject) {
+      let editView =  false;
+      let paybox = null;
+      this.setState({ selectedProject, editView, paybox });
+    }
+
     render() {
         let { id, selectedProject } = this.props;
+        const { modalType, paybox, editView } = this.state;
         const { rowStyle, colStyle, gutter } = basicStyle;
         const containerId = 'card-wrapper';
         const marginStyle = {
@@ -46,7 +88,7 @@ class ShowcasePage extends Component {
         <Progress percent={p} status="active" style={marginStyle} />;
         let formattedProject = this.dateToString(selectedProject);
         return (
-            <LayoutContentWrapper style={{ height: '100vh' }}>
+            <LayoutContentWrapper style={{ height: '100%' }}>
                 <LayoutContent>
                 <h3 style={{"color": "#999999"}}>Project ID: {id}</h3>
                 <Row style={rowStyle} gutter={gutter} justify="start">
@@ -92,17 +134,70 @@ class ShowcasePage extends Component {
                           {formattedProject.startDate}
                         </p>
                       </div>
-                      <div style={{"margin-top": "4%"}}>
-                        <b>
-                          <span class="material-icons" style={{"font-size": "16px", "margin-right": "2%"}}>highlight_off</span>
-                          Will close on: 
-                        </b>
-                        <p>
-                          {formattedProject.endDate}
-                        </p>
-                      </div>
+                      <Col md={12} sm={12} xs={24} style={colStyle}>
+                        <div style={{"margin-top": "4%"}}>
+                          <b>
+                            <span class="material-icons" style={{"font-size": "16px", "margin-right": "2%"}}>highlight_off</span>
+                            Will close on: 
+                          </b>
+                          <p>
+                            {formattedProject.endDate}
+                          </p>
+                        </div>
+                      </Col>
+                      <Col md={12} sm={12} xs={24} style={colStyle}>
+                        <div style={{"margin-left": "10%"}}>
+                          <ButtonWrapper className="isoButtonWrapper">
+                            <Button
+                                type="primary"
+                                icon="pay-circle"
+                                onClick={this.openPayBox}
+                                >
+                            Back it
+                            </Button>
+                          </ButtonWrapper>
+                          {paybox ? (
+                              <Card
+                              editView={editView}
+                              modalType={modalType}
+                              selectedProject={selectedProject}
+                              handleCancel={this.handleCancel}
+                              updateProject={this.updateProject}
+                              />
+                          ) : (
+                              ''
+                          )}
+                        </div>
+                      </Col>
                     </div>
                   </Col>
+                </Row>
+
+                <Row style={rowStyle} gutter={gutter} justify="start">
+                    <Col style={{"margin-top": "10%"}}>
+                      <Tabs defaultActiveKey="1">
+                        <TabPane
+                          tab={
+                            <span>
+                              <Icon type="message" />Details
+                            </span>
+                          }
+                          key="1"
+                        >
+                          <div dangerouslySetInnerHTML={{__html: selectedProject.additional ? selectedProject.additional.value : ''}} />
+                        </TabPane>
+                        <TabPane
+                          tab={
+                            <span>
+                              <Icon type="question" />FAQ
+                            </span>
+                          }
+                          key="2"
+                        >
+                          No question yet
+                        </TabPane>
+                      </Tabs>
+                    </Col>
                 </Row>
                 </LayoutContent>
             </LayoutContentWrapper>
@@ -124,4 +219,9 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(ShowcasePage);
+export default connect(mapStateToProps, {
+  addCard,
+  editCard,
+  deleteCard,
+  restoreCards,
+})(ShowcasePage);

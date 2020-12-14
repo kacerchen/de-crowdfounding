@@ -86,7 +86,14 @@ const fakedata = [
     currency: 'USD',
     projectaccount: '**************************',
     startDate: moment("20201108", "YYYYMMDD"),
-    endDate: moment("20201231", "YYYYMMDD")
+    endDate: moment("20201231", "YYYYMMDD"),
+    additional: '',
+    investors: [
+      {
+        account: '0xjks79nmdfsljfo3kljds',
+        amount: '123'
+      }
+    ]
   },
   {
     id: 2,
@@ -99,7 +106,14 @@ const fakedata = [
     currency: 'ALGO',
     projectaccount: '**************************',
     startDate: moment("20201108", "YYYYMMDD"),
-    endDate: moment("20210121", "YYYYMMDD")
+    endDate: moment("20210121", "YYYYMMDD"),
+    additional: '',
+    investors: [
+      {
+        account: '0xjks79nmdfsljfowoepqo',
+        amount: '56'
+      }
+    ]
   },
   {
     id: 1,
@@ -112,7 +126,18 @@ const fakedata = [
     currency: 'USDC',
     projectaccount: '**************************',
     startDate: moment("20201108", "YYYYMMDD"),
-    endDate: moment("20201210", "YYYYMMDD")
+    endDate: moment("20201210", "YYYYMMDD"),
+    additional: '',
+    investors: [
+      {
+        account: '0xjks79nmdfsljfo3k7892',
+        amount: '1000'
+      },
+      {
+        account: '0xjks79nmdfsljfo3123io',
+        amount: '29000'
+      }
+    ]
   }
 ];
 export { createColumns, fakedata };

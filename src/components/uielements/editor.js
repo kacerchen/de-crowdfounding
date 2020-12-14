@@ -8,8 +8,9 @@ import QuillEditor from './styles/editor.style';
 export default class Editor extends Component {
   constructor(props) {
     super(props);
+    const { selectedProject } = props;
     this.handleChange = this.handleChange.bind(this);
-    this.state = { value: '' };
+    this.state = { value: selectedProject.additional.value };
     this.quillModules = {
       toolbar: {
         container: [
@@ -29,6 +30,9 @@ export default class Editor extends Component {
   }
 
   handleChange(value) {
+    const { selectedProject, updateProject } = this.props;
+    selectedProject['additional'] = { value };
+    updateProject(selectedProject);
     this.setState({ value });
   }
 
