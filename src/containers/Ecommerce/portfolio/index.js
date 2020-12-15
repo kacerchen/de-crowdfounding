@@ -95,13 +95,13 @@ class Portfolio extends Component  {
     componentDidMount() {
         this.initUpdateChart();
 
-        new FrappeChart(configs.barChart);
-        new FrappeChart(configs.lineChart);
-        new FrappeChart(configs.scatterChart);
-        new FrappeChart(configs.pieChart);
-        new FrappeChart(configs.percentageChart);
-        new FrappeChart(configs.heatMap);
-        new FrappeChart(configs.heatMapHalloween);
+        // new FrappeChart(configs.barChart);
+        // new FrappeChart(configs.lineChart);
+        // new FrappeChart(configs.scatterChart);
+        // new FrappeChart(configs.pieChart);
+        // new FrappeChart(configs.percentageChart);
+        // new FrappeChart(configs.heatMap);
+        // new FrappeChart(configs.heatMapHalloween);
         // let obj = this.setConfig();
         // this.updatedChart = new FrappeChart(obj);
     }

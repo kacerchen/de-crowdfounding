@@ -99,9 +99,21 @@ class ProjectPage extends Component {
         editCard(this.selectedProject);
     };
 
+    dateToString(card) {
+        if(typeof(card.startDate) != "string") {
+          card.startDate = card.startDate.locale('pl').format('LLLL');
+        }
+        if(typeof(card.endDate) != "string") {
+          card.endDate = card.endDate.locale('pl').format('LLLL');
+        }
+  
+        return card;
+    }
+
     render() {
         const { rowStyle, colStyle, gutter } = basicStyle;
         let { id, selectedProject } = this.props;
+        let p = this.dateToString(selectedProject);
         const containerId = 'card-wrapper';
         const onEditorStateChange = (editorState) => {
             this.setState({ editorState });
@@ -171,7 +183,8 @@ class ProjectPage extends Component {
                             </InfoFormWrapper>
                         </Col>
                         <Col md={12} sm={12} xs={24} style={colStyle}>
-                            <CardInfoWrapper id={containerId} className="isoCardWrapper" />
+                            <Row>
+                                <CardInfoWrapper id={containerId} className="isoCardWrapper" />
                                 <h4>Classification: </h4>
                                 <ContentHolder>
                                     <Tag color="#f50">#Art</Tag>
@@ -179,6 +192,19 @@ class ProjectPage extends Component {
                                     <Tag color="#87d068">#Food</Tag>
                                     <Tag color="#108ee9">#Tech</Tag>
                                 </ContentHolder>
+                            </Row>
+                            <Row style={{"margin-top": "5%"}}>
+                                <h4>Goal Amount: </h4>
+                                <span>${selectedProject['goalamount']} {selectedProject['currency']}</span>
+                            </Row>
+                            <Row style={{"margin-top": "1%"}}>
+                                <h4>Start Date: </h4>
+                                <span>{p['startDate']}</span>
+                            </Row>
+                            <Row style={{"margin-top": "1%"}}>
+                                <h4>End Date: </h4>
+                                <span>{p['endDate']}</span>
+                            </Row>
                         </Col>
                     </Row>
                     <Row style={rowStyle} gutter={gutter} justify="start">

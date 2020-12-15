@@ -88,6 +88,7 @@ export default class extends Component {
                     onChange={event => {
                         payObj['account'] = event.target.value;
                         // updateProject(selectedProject);
+                        //Pago PayID (i.e. user$pagoservices.com)
                     }}
                     name='account'
                     key='0'
