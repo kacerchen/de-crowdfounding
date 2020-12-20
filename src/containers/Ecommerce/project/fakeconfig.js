@@ -90,7 +90,7 @@ const fakedata = [
     additional: '',
     investors: [
       {
-        account: '0xjks79nmdfsljfo3kljds',
+        payid: 'kris$pagoservices.com',
         amount: '123'
       }
     ]
@@ -110,7 +110,7 @@ const fakedata = [
     additional: '',
     investors: [
       {
-        account: '0xjks79nmdfsljfowoepqo',
+        payid: 'kathy$pagoservices.com',
         amount: '56'
       }
     ]
@@ -130,11 +130,11 @@ const fakedata = [
     additional: '',
     investors: [
       {
-        account: '0xjks79nmdfsljfo3k7892',
+        payid: 'alice$pagoservices.com',
         amount: '1000'
       },
       {
-        account: '0xjks79nmdfsljfo3123io',
+        payid: 'bob$pagoservices.com',
         amount: '29000'
       }
     ]

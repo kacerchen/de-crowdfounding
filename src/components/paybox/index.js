@@ -39,7 +39,8 @@ export default class extends Component {
     super(props);
 
     this.state = {
-      payObj: {}
+      payObj: {},
+      domain: '$pagoservices.com'
     }
   }
 
@@ -52,7 +53,7 @@ export default class extends Component {
           updateProject,
       } = this.props;
 
-      let { payObj } = this.state;
+      let { payObj, domain } = this.state;
 
       const saveButton = () => {
           let { payObj } = this.state;
@@ -82,16 +83,17 @@ export default class extends Component {
                   <b><Icon type="dollar" style={{ fontSize: '20px' }} spin /></b>
                 </div>
                 <InputField
-                    placeholder='Account'
+                    placeholder='Enter your pay ID'
                     type="text"
                     className={`isoCardInput name`}
                     onChange={event => {
-                        payObj['account'] = event.target.value;
+                        payObj['payid'] = event.target.value + domain;
                         // updateProject(selectedProject);
                         //Pago PayID (i.e. user$pagoservices.com)
                     }}
-                    name='account'
+                    name='payid'
                     key='0'
+                    addonAfter= {domain}
                 />
 
                 <InputField

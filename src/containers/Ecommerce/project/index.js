@@ -16,6 +16,7 @@ import {
 import configs from './dateconfig';
 import SimpleTable from '../../Tables/antTables/tableViews/simpleView';
 import { createColumns } from './fakeconfig';
+import * as fetchdata from './fetchdata';
 
 const { addCard, editCard, deleteCard, restoreCards } = cardActions;
 class Projects extends Component {
@@ -37,6 +38,7 @@ class Projects extends Component {
             selectedProject: null,
             modalType: '',
             configsValue: configs,
+            units: null,
         };
     }
 
@@ -148,9 +150,28 @@ class Projects extends Component {
       return cards;
     }
 
+    initOptions() {
+      fetchdata.getAllAssets((res) => {
+        let unitsArr = [];
+
+        for (let asset of res) {
+          let unit = asset['params']['unit-name'];
+          unitsArr.push(unit);
+        }
+
+        this.setState({
+          units: unitsArr
+        })
+      })
+    }
+
+    componentDidMount() {
+      this.initOptions();
+    }
+
     render(){
         const { rowStyle, colStyle, gutter } = basicStyle;
-        const { editView, selectedProject, modalType } = this.state;
+        const { editView, selectedProject, modalType, units } = this.state;
         const cards = this.dateToString(clone(this.props.cards));
         return (
             <LayoutWrapper>
@@ -175,6 +196,7 @@ class Projects extends Component {
                         submitProject={this.submitProject}
                         updateProject={this.updateProject}
                         renderDatePicker={this.renderDatePicker}
+                        units={units}
                         />
                     ) : (
                         ''

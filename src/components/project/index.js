@@ -18,7 +18,11 @@ const { TextArea } = Input;
 
 const InputField = InputWrapper(Input);
 
-const selectAfter = (selectedProject, updateProject) => {
+const selectAfter = (units, selectedProject, updateProject) => {
+  let options_template = units.map((unit) => { 
+    return <Option value={unit}>{unit}</Option>
+   });
+
   return <Select 
     onChange={value => {
       selectedProject['currency'] = value;
@@ -26,16 +30,17 @@ const selectAfter = (selectedProject, updateProject) => {
     }}
     name='currency'
     key='3'
-    style={{ width: 70 }}>
-    <Option value="USD">USD</Option>
+    style={{ width: 100 }}>
+    
+    {options_template}
+    {/* <Option value="USD">USD</Option>
     <Option value="ALGO">ALGO</Option>
     <Option value="USDC">USDC</Option>
-    <Option value="USDT">USDT</Option>
+    <Option value="USDT">USDT</Option> */}
   </Select>
 };
 
 export default class extends Component {
-
     render() {
         const {
             modalType,
@@ -45,40 +50,8 @@ export default class extends Component {
             submitProject,
             updateProject,
             renderDatePicker,
+            units
         } = this.props;
-
-        this.columns = [
-            {
-              title: 'Project Name',
-              dataIndex: 'name',
-              key: 'name',
-            },
-            {
-              title: 'Description',
-              dataIndex: 'description',
-              key: 'description',
-            },
-            {
-              title: 'Goal Amount',
-              dataIndex: 'goalamount',
-              key: 'goalamount',
-            },
-            {
-              title: 'Currency',
-              dataIndex: 'currency',
-              key: 'currency',
-            },
-            {
-                title: 'Project Account',
-                dataIndex: 'projectaccount',
-                key: 'projectaccount',
-            },
-            {
-                title: 'Timelimit',
-                dataIndex: 'timelimit',
-                key: 'timelimit',
-            },
-        ];
 
         const saveButton = () => {
             submitProject();
@@ -157,6 +130,7 @@ export default class extends Component {
                     placeholder='Goal Amount'
                     type="text"
                     className={`goalamount`}
+                    style={{"margin-top":"10px"}}
                     onChange={event => {
                         selectedProject['goalamount'] = event.target.value;
                         updateProject(selectedProject);
@@ -164,7 +138,7 @@ export default class extends Component {
                     name='goalamount'
                     key='3'
                     addonBefore="$"
-                    addonAfter={selectAfter(selectedProject, updateProject)}
+                    addonAfter={selectAfter(units, selectedProject, updateProject)}
                   />
 
                   <InputField

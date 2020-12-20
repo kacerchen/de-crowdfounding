@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const EXPLOER_API_URL = "https://api.algoexplorer.io/v1"
+const EXPLOER_API_URL = "https://api.algoexplorer.io/v1";
 const getHistoryBalance = function(accountId, days, callback) {
     axios.get(`${EXPLOER_API_URL}/account/${accountId}/balances/history/day/samples/${days}`).then(
         (result) => {
