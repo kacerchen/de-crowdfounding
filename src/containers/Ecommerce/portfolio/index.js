@@ -1,86 +1,110 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'antd';
-import FrappeChart from 'frappe-charts/dist/frappe-charts.min.esm';
 import PageHeader from '../../../components/utility/pageHeader';
 import Box from '../../../components/utility/box';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import ContentHolder from '../../../components/utility/contentHolder';
-import Button from '../../../components/uielements/button';
+import ChartWrapper from '../../Charts/chart.style';
+import { Chart } from "react-google-charts";
+import Select, { SelectOption } from '../../../components/uielements/select';
+import clone from 'clone';
 import basicStyle from '../../../config/basicStyle';
-import * as configs from './config';
 import 'frappe-charts/dist/frappe-charts.min.css';
 import * as fetchdata from './fetchdata';
-import config from '../../../config';
+import moment from 'moment';
+
+const Option = SelectOption;
 
 class Portfolio extends Component  {
     constructor(props) {
         super(props);
 
         this.state = {
-            fetched_data: [],
-            formatted_data: {},
-            basicData: {},
-            updatedChartConfig: {},
-            currentIndex: 2
+            fetched_data_line: [],
+            formatted_data_line: [['x', 'balance'], [0, 0]],
+            lineChartConfig: {},
+            currentIndex: 2,
+            selectedProject: null
         };
     }
 
-    // state = {
-    //     currentIndex: 2
-    // };
-
-    initUpdateChart() {
-        const sampleAccount = "6RHERAEOZSULXVK3GLNE32QYJBKJTO4YE3D2GPCVUF5IRK2R6EBCA3INDU";
-        const selected_days = 30;
-        fetchdata.getHistoryBalance(
-            sampleAccount,
-            selected_days,
-            (res) => {
-                let formatted = this.formatData(res);
-                const basicData = {
-                    labels: formatted['times'],
-                    datasets: [
-                      {
-                        title: 'Balance',
-                        color: 'light-blue',
-                        values: formatted['balances']
-                      }
-                    ]
-                };
-        
-                const updatedChartConfig = {
-                    header: 'Updateable Chart',
-                    title: '',
-                    parent: '#frappeupdatedChart',
-                    parentId: 'frappeupdatedChart',
-                    data: basicData,
-                    type: 'line',
-                    show_dots: 0,
-                    heatline: 1
-                };
-
-                this.updatedChart = new FrappeChart(updatedChartConfig);
-                this.setState({
-                    fetched_data: res,
-                    formatted_data: formatted,
-                    basicData,
-                    updatedChartConfig
-                });
-            }
-        );
+    getSource(sampleAccount, selected_days) {
+        return new Promise((resolve, reject) => {
+            fetchdata.getHistoryBalance(
+                sampleAccount,
+                selected_days,
+                (res) => {
+                    let formatted = this.formatDataGoogleLine(res);
+                    // let configObj = configs.lineChartGoogle;
+                    // configObj['rows'] = formatted;
+                    resolve({ formatted });
+                }
+            );
+        });
     }
 
-    formatData(dataArr) {
-        let balances = [];
-        let times = [];
+    async initLineChart(selectedDays) {
+        const sampleAccount = "6RHERAEOZSULXVK3GLNE32QYJBKJTO4YE3D2GPCVUF5IRK2R6EBCA3INDU";
+        const selected_days = selectedDays.days;
 
-        dataArr.forEach((obj) => {
-            balances.unshift(obj.balance);
-            times.unshift(this.convertToTime(obj.timestamp));
+        let { formatted } = await this.getSource(sampleAccount, selected_days);
+
+        if(selectedDays.startStr && selectedDays.endStr) {
+            formatted = this.fetchDataByRange(selectedDays.startStr, selectedDays.endStr, formatted);
+        }
+
+        this.setState({
+            formatted_data_line: formatted,
+            // lineChartConfig: configObj
         });
 
-        return { balances, times };
+        // fetchdata.getHistoryBalance(
+        //     sampleAccount,
+        //     selected_days,
+        //     (res) => {
+        //         let formatted = this.formatDataGoogleLine(res);
+        //         let configObj = configs.lineChartGoogle;
+        //         configObj['rows'] = formatted;
+                
+        //         this.setState({
+        //             fetched_data_line: res,
+        //             formatted_data_line: formatted,
+        //             lineChartConfig: configObj
+        //         });
+
+        //         return configObj;
+        //     }
+        // );
+    }
+
+    fetchDataByRange(start, end, data) {
+        let startIndex;
+        let endIndex;
+        data.forEach((arr) => {
+            if(arr.includes(start)) {
+                startIndex = data.indexOf(arr);
+            } else if(arr.includes(end)) {
+                endIndex = data.indexOf(arr);
+            }
+        });
+
+        let slicedArr = data.slice(startIndex, endIndex + 1);
+
+        return slicedArr;
+    }
+
+    formatDataGoogleLine(dataArr) {
+        let rowArr = [];
+
+        dataArr.forEach((obj) => {
+            let row = [];
+            row.push(this.convertToTime(obj.timestamp));
+            row.push(obj.balance);
+            rowArr.unshift(row);
+        });
+
+        return rowArr;
     }
 
     convertToTime(timestamp) {
@@ -88,56 +112,132 @@ class Portfolio extends Component  {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        let formatted = `${year}-${month}-${day}`;
+        let formatted = `${month}/${day}/${year}`;
         return formatted;
     }
   
     componentDidMount() {
-        this.initUpdateChart();
-
-        // new FrappeChart(configs.barChart);
-        // new FrappeChart(configs.lineChart);
-        // new FrappeChart(configs.scatterChart);
-        // new FrappeChart(configs.pieChart);
-        // new FrappeChart(configs.percentageChart);
-        // new FrappeChart(configs.heatMap);
-        // new FrappeChart(configs.heatMapHalloween);
-        // let obj = this.setConfig();
-        // this.updatedChart = new FrappeChart(obj);
+        this.initLineChart({days: 365});
     }
-    addData = () => {
-        let { currentIndex, basicData } = this.state;
-        currentIndex += 1;
-        const data = basicData.datasets[currentIndex % 3];
-        this.updatedChart.add_data_point(data.values, data.title);
-        this.setState({ currentIndex });
-    };
-    removeData = () => {
-        const { currentIndex } = this.state;
-        if (currentIndex > 0) {
-        this.updatedChart.remove_data_point(currentIndex);
-        this.setState({ currentIndex: currentIndex - 1 });
+
+    updateLineChart = (selectedProject) => {
+        let startDate = selectedProject['startDate'];
+        let endDate = selectedProject['endDate'];
+        let startStr = startDate.format('L');
+        let now = moment();
+        let endStr;
+
+        let difNow = now.diff(startDate, 'days');
+        let difEnd = endDate.diff(startDate, 'days');
+
+        let dif = difNow + 1;
+        if(difNow >= difEnd) {
+            endStr = endDate.format('L');
+        } else {
+            endStr = now.format('L');
         }
+
+        this.initLineChart({ 
+            days: dif,
+            startStr,
+            endStr
+        });
+    }
+
+    selectProject = (projects) => {
+        let options_template = projects.map((project) => { 
+            let name = project['name'];
+            return <Option value={name}>{name}</Option>
+        });
+      
+        return <Select 
+          onChange={value => {
+            let p = projects.find((project) => {
+                return project['name'] == value;
+            });
+
+            this.updateLineChart(p);
+            this.setState({
+                selectedProject: p
+            });
+
+          }}
+          name='project'
+          key='0'
+          style={{ width: 100 }}>
+          
+          {options_template}
+        </Select>
     };
+
     render() {
         const { rowStyle, colStyle, gutter } = basicStyle;
-        // const { updatedChartConfig } = this.state;
+        const cards = clone(this.props.cards);
+        const { formatted_data_line } = this.state;
         
         return (
         <LayoutWrapper className="isoMapPage">
             <PageHeader>Portfolio</PageHeader>
+            {/* <Row style={rowStyle} gutter={gutter} justify="start">
+                <Col md={24} xs={24} style={colStyle}>
+                    <Box title="Portfolio balance">
+                    <ContentHolder>
+                        <div style={{"margin-top": "3%"}}>
+                            {this.selectProject(cards)}
+                        </div>
+                        <GoogleChart {...lineChartConfig} />
+                    </ContentHolder>
+                    </Box>
+                </Col>
+            </Row> */}
             <Row style={rowStyle} gutter={gutter} justify="start">
-            <Col md={24} xs={24} style={colStyle}>
-                <Box title="Portfolio balance">
-                <ContentHolder>
-                    <div style={{display:'flex', justifyContent: 'flex-end'}}>
-                    <Button onClick={this.addData} style={{marginRight: '10px'}}>+ Add Value</Button>
-                    <Button onClick={this.removeData}>Remove Value</Button>
-                    </div>
-                    <div id="frappeupdatedChart" />
-                </ContentHolder>
-                </Box>
-            </Col>
+                <Col md={24} xs={24} style={colStyle}>
+                    <Box title="Portfolio balance">
+                        <ContentHolder>
+                            <div style={{"margin-top": "3%"}}>
+                                {this.selectProject(cards)}
+                            </div>
+
+                            <ChartWrapper>
+                                <Chart
+                                    width={'100%'}
+                                    height={'400px'}
+                                    chartType="LineChart"
+                                    loader={<div>Loading Chart</div>}
+                                    data={[['x', 'balance'], ...formatted_data_line]}
+                                    options={{
+                                        hAxis: {
+                                            textStyle: {
+                                                color: '#788195',
+                                            },
+                                            title: 'Time',
+                                            titleTextStyle: {
+                                                color: '#788195',
+                                            },
+                                        },
+                                        vAxis: {
+                                            textStyle: {
+                                                color: '#788195',
+                                            },
+                                            title: 'Balance',
+                                            titleTextStyle: {
+                                                color: '#788195',
+                                            },
+                                        },
+                                        colors: ['#48A6F2'],
+                                        dataOpacity: 1.0,
+                                        animation: {
+                                            duration: 1000,
+                                            easing: 'in',
+                                            startup: true,
+                                        },
+                                    }}
+                                    rootProps={{ 'data-testid': '1' }}
+                                    />
+                            </ChartWrapper>
+                        </ContentHolder>
+                    </Box>
+                </Col>
             </Row>
         </LayoutWrapper>
         );
@@ -145,9 +245,9 @@ class Portfolio extends Component  {
 }
 
 function mapStateToProps(state) {
-    // const { cards } = {...state.Projects.toJS()};
+    const { cards } = {...state.Projects.toJS()};
     return {
-      ...state.Projects.toJS(),
+      cards,
     };
 }
   

@@ -14,6 +14,8 @@ import Tabs, { TabPane } from '../../../components/uielements/tabs';
 import { ButtonWrapper } from '../../../components/card/cardModal.style';
 import Card from '../../../components/paybox';
 import cardActions from '../../../redux/project/actions';
+import Chart from '../../../components/chart';
+import clone from 'clone';
 // import { useParams } from 'react-router-dom';
 
 const { addCard, editCard, deleteCard, restoreCards } = cardActions;
@@ -86,7 +88,8 @@ class ShowcasePage extends Component {
         let p = this.calculatePercentage(selectedProject.balance, selectedProject.goalamount);
         let bar = p >= 100 ? <Progress percent={100} style={marginStyle} /> :
         <Progress percent={p} status="active" style={marginStyle} />;
-        let formattedProject = this.dateToString(selectedProject);
+        let copy_project = clone(selectedProject);
+        let formattedProject = this.dateToString(clone(selectedProject));
         return (
             <LayoutContentWrapper style={{ height: '100%' }}>
                 <LayoutContent>
@@ -169,6 +172,14 @@ class ShowcasePage extends Component {
                           )}
                         </div>
                       </Col>
+                    </div>
+                  </Col>
+                </Row>
+
+                <Row style={rowStyle} gutter={gutter} justify="start">
+                  <Col md={12} sm={12} xs={24} style={colStyle}>
+                    <div style={{"margin-top": "10%"}}>
+                      <Chart project={copy_project} />
                     </div>
                   </Col>
                 </Row>

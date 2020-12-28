@@ -31,9 +31,8 @@ export default class Editor extends Component {
   }
 
   handleChange(value) {
-    const { selectedProject, updateProject } = this.props;
+    const { selectedProject } = this.props;
     selectedProject['additional'] = { value };
-    updateProject(selectedProject);
     this.setState({ value });
   }
 

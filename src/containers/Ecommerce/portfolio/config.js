@@ -130,10 +130,72 @@ const basicData = {
     show_dots: 0,
     heatline: 1
   };
+
+  const width = '100%';
+  const height = '400px';
+
+  const lineChartGoogle = {
+    title: 'Line Chart',
+    chartType: 'LineChart',
+    key: 'LineChart',
+    width,
+    height,
+    columns: [
+      {
+        label: 'time',
+        type: 'string',
+      },
+      {
+        label: 'Balance',
+        type: 'number',
+      },
+    ],
+    rows: [
+      ['1949', 11],
+    ],
+    options: {
+      legend: {
+        textStyle: {
+          color: '#788195',
+        },
+      },
+      hAxis: {
+        textStyle: {
+          color: '#788195',
+        },
+        title: 'Time',
+        titleTextStyle: {
+          color: '#788195',
+        },
+      },
+      vAxis: {
+        textStyle: {
+          color: '#788195',
+        },
+        title: 'Balance',
+        titleTextStyle: {
+          color: '#788195',
+        },
+      },
+      colors: ['#48A6F2'],
+      dataOpacity: 1.0,
+      animation: {
+        duration: 1000,
+        easing: 'in',
+        startup: true,
+      },
+      tooltip: {
+        textStyle: {
+          color: '#788195',
+        },
+      },
+    },
+  };
   
   export {
     barChart,
     lineChart,
+    lineChartGoogle,
     scatterChart,
     pieChart,
     percentageChart,
