@@ -11,6 +11,7 @@ import { rtl } from '../../../config/withDirection';
 import Button, { ButtonGroup } from '../../../components/uielements/button';
 import { Icon } from 'antd';
 import Tabs, { TabPane } from '../../../components/uielements/tabs';
+import SimpleTable from '../../Tables/antTables/tableViews/simpleView';
 import { ButtonWrapper } from '../../../components/card/cardModal.style';
 import Card from '../../../components/paybox';
 import cardActions from '../../../redux/project/actions';
@@ -29,6 +30,19 @@ class ShowcasePage extends Component {
         editView: false,
         paybox: null
       }
+
+      this.columns = [
+        {
+          title: 'Backer',
+          dataIndex: 'payid',
+          rowKey: 'payid'
+        },
+        {
+          title: 'Amount',
+          dataIndex: 'amount',
+          rowKey: 'amount'
+        }
+      ];
 
       this.updateProject = this.updateProject.bind(this);
       this.handleCancel = this.handleCancel.bind(this);
@@ -75,6 +89,15 @@ class ShowcasePage extends Component {
       let editView =  false;
       let paybox = null;
       this.setState({ selectedProject, editView, paybox });
+    }
+
+    selectLast(selectedProject, num) {
+      let arr = selectedProject.investors;
+      if(arr.length != 0) {
+        return arr.slice(Math.max(arr.length - num, 0));
+      }
+
+      return arr;
     }
 
     render() {
@@ -180,6 +203,11 @@ class ShowcasePage extends Component {
                   <Col md={12} sm={12} xs={24} style={colStyle}>
                     <div style={{"margin-top": "10%"}}>
                       <Chart project={copy_project} />
+                    </div>
+                  </Col>
+                  <Col md={12} sm={12} xs={24} style={colStyle}>
+                    <div style={{"margin": "10% 0% 0% 10%"}}>
+                      <SimpleTable columns={this.columns} dataSource={this.selectLast(selectedProject, 5)} />
                     </div>
                   </Col>
                 </Row>

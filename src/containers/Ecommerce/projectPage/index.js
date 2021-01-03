@@ -20,6 +20,7 @@ import {
     DateRangePicker,
 } from '../../../components/uielements/reactDates';
 import cardActions from '../../../redux/project/actions';
+import clone from 'clone';
 // import { useParams } from 'react-router-dom';
 
 const Option = SelectOption;
@@ -113,7 +114,7 @@ class ProjectPage extends Component {
     render() {
         const { rowStyle, colStyle, gutter } = basicStyle;
         let { id, selectedProject } = this.props;
-        let p = this.dateToString(selectedProject);
+        let p = this.dateToString(clone(selectedProject));
         const containerId = 'card-wrapper';
         const onEditorStateChange = (editorState) => {
             this.setState({ editorState });
