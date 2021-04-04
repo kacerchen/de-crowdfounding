@@ -10,7 +10,7 @@ import ContentHolder from '../../../components/utility/contentHolder';
 import basicStyle from '../../../config/basicStyle';
 import IntlMessages from '../../../components/utility/intlMessages';
 import Card from '../../Uielements/Card/card.style';
-import card from '../../../components/card';
+import cardActions from '../../../redux/project/actions';
 import { rtl } from '../../../config/withDirection';
 import { size } from 'styled-theme';
 import moment from 'moment';
@@ -21,6 +21,7 @@ import {
   Link
 } from "react-router-dom";
 
+const { requestCards } = cardActions;
 class Showcases extends Component {
 
     constructor(props) {
@@ -29,11 +30,15 @@ class Showcases extends Component {
 
     dateToString(cards) {
       cards.forEach((card) => {
-        if(typeof(card.startDate) != "string") {
+        if(moment.isMoment(card.startDate)) {
           card.startDate = card.startDate.locale('pl').format('LLLL');
+        } else {
+          card.startDate = moment.unix(card.startDate/1000).format("MM/DD/YYYY");
         }
-        if(typeof(card.endDate) != "string") {
+        if(moment.isMoment(card.endDate)) {
           card.endDate = card.endDate.locale('pl').format('LLLL');
+        } else {
+          card.endDate = moment.unix(card.endDate/1000).format("MM/DD/YYYY");
         }
       });
 
@@ -58,13 +63,22 @@ class Showcases extends Component {
       let b = Number(curBalance);
       let g = Number(goalAmout);
       let percentage = (b/ g) * 100; 
-      return percentage.toFixed();
+      return percentage;
     }
 
     calculateLeftDays(momentStr) {
       let dateObj = new Date(momentStr);
       let momentObj = moment(dateObj);
       return momentObj.endOf('day').fromNow();
+    }
+
+    initTableData() {
+      this.props.requestCards();
+      console.log(this.props.cards);
+    }
+
+    componentDidMount() {
+      this.initTableData();
     }
 
     render() {
@@ -79,7 +93,7 @@ class Showcases extends Component {
       const cards = this.dateToString(clone(this.props.cards));
       const cards_jsx = [];
       for(let i = 0; i < cards.length; i++){
-        let p = this.calculatePercentage(cards[i].balance, cards[i].goalamount);
+        let p = this.calculatePercentage(cards[i].balance, cards[i].goalAmount);
         let bar = p >= 100 ? <Progress percent={100} style={marginStyle} /> :
         <Progress percent={p} status="active" style={marginStyle} />;
 
@@ -92,7 +106,7 @@ class Showcases extends Component {
                     <iframe 
                       width="100%" 
                       height="315" 
-                      src={cards[i].videourl} 
+                      src={cards[i].videoUrl} 
                       frameborder="0" 
                       allow="accelerometer; autoplay; clipboard-write; 
                       encrypted-media; gyroscope; picture-in-picture" 
@@ -101,21 +115,21 @@ class Showcases extends Component {
                     </div>
                     <div className="custom-card">
                       <h2>
-                        {<IntlMessages id={cards[i].name} />}
+                        {cards[i].name}
                       </h2>
-                      <p>{<IntlMessages id={cards[i].description} />}</p>
+                      <p>{cards[i].description}</p>
                       <p>
                         <span>
                           <b style={{"font-size": "20px", "color": "#4f4e4e"}}>
-                            {<IntlMessages id={"$" + cards[i].balance + " "} />}
+                            {cards[i].balance}
                           </b>
-                          {<IntlMessages id={cards[i].currency} />} raised
+                          {cards[i].goalAssetId} raised
                         </span>
                       </p>
                       {bar}
                       <p>
                         <span class="material-icons" style={{"font-size": "16px"}}>watch_later</span>
-                        {<IntlMessages id={" Will close " + this.calculateLeftDays(cards[i].endDate)} />}
+                        {" Will close " + this.calculateLeftDays(cards[i].endDate)}
                       </p>
                     </div>
                   </Card>
@@ -140,4 +154,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Showcases);
+export default connect(mapStateToProps, {
+  requestCards,
+})(Showcases);

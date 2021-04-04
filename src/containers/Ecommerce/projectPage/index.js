@@ -21,6 +21,7 @@ import {
 } from '../../../components/uielements/reactDates';
 import cardActions from '../../../redux/project/actions';
 import clone from 'clone';
+import moment from 'moment';
 // import { useParams } from 'react-router-dom';
 
 const Option = SelectOption;
@@ -40,7 +41,7 @@ const Tag = props => (
 const selectAfter = (selectedProject, updateProject) => {
     return <Select 
       onChange={value => {
-        selectedProject['currency'] = value;
+        selectedProject['goalAssetId'] = value;
         updateProject(selectedProject);
       }}
       name='currency'
@@ -101,11 +102,15 @@ class ProjectPage extends Component {
     };
 
     dateToString(card) {
-        if(typeof(card.startDate) != "string") {
-          card.startDate = card.startDate.locale('pl').format('LLLL');
+        if(moment.isMoment(card.startDate)) {
+            card.startDate = card.startDate.locale('pl').format('LLLL');
+        } else {
+            card.startDate = moment.unix(card.startDate/1000).format("MM/DD/YYYY");
         }
-        if(typeof(card.endDate) != "string") {
-          card.endDate = card.endDate.locale('pl').format('LLLL');
+        if(moment.isMoment(card.endDate)) {
+            card.endDate = card.endDate.locale('pl').format('LLLL');
+        } else {
+            card.endDate = moment.unix(card.endDate/1000).format("MM/DD/YYYY");
         }
   
         return card;
@@ -167,11 +172,11 @@ class ProjectPage extends Component {
 
                                     <h4>Video URL: </h4>
                                     <InputField
-                                        placeholder={selectedProject.videourl}
+                                        placeholder={selectedProject.videoUrl}
                                         type="text"
                                         className={`videourl`}
                                         onChange={event => {
-                                            selectedProject['videourl'] = event.target.value;
+                                            selectedProject['videoUrl'] = event.target.value;
                                             this.updateProject(selectedProject);
                                         }}
                                         name='videourl'
@@ -196,7 +201,7 @@ class ProjectPage extends Component {
                             </Row>
                             <Row style={{"margin-top": "5%"}}>
                                 <h4>Goal Amount: </h4>
-                                <span>${selectedProject['goalamount']} {selectedProject['currency']}</span>
+                                <span>${selectedProject['goalAmount']} {selectedProject['goalAssetId']}</span>
                             </Row>
                             <Row style={{"margin-top": "1%"}}>
                                 <h4>Start Date: </h4>

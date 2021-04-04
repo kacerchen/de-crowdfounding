@@ -9,7 +9,7 @@ export default class Editor extends Component {
   constructor(props) {
     super(props);
     const { selectedProject } = props;
-    const initVal = selectedProject.additional.value ? selectedProject.additional.value : '';
+    const initVal = selectedProject.additional ? selectedProject.additional.value : '';
     this.handleChange = this.handleChange.bind(this);
     this.state = { value: initVal };
     this.quillModules = {

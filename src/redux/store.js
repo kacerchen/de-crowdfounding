@@ -17,6 +17,6 @@ const store = createStore(
     router: routerReducer
   }),
   compose(applyMiddleware(...middlewares))
-);
+  );
 sagaMiddleware.run(rootSaga);
 export { store, history };

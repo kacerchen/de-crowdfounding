@@ -25,7 +25,7 @@ const selectAfter = (units, selectedProject, updateProject) => {
 
   return <Select 
     onChange={value => {
-      selectedProject['currency'] = value;
+      selectedProject['goalAssetId'] = value;
       updateProject(selectedProject);
     }}
     name='currency'
@@ -119,7 +119,7 @@ export default class extends Component {
                       type="text"
                       className={`videourl`}
                       onChange={event => {
-                          selectedProject['videourl'] = event.target.value;
+                          selectedProject['videoUrl'] = event.target.value;
                           updateProject(selectedProject);
                       }}
                       name='videourl'
@@ -132,7 +132,7 @@ export default class extends Component {
                     className={`goalamount`}
                     style={{"margin-top":"10px"}}
                     onChange={event => {
-                        selectedProject['goalamount'] = event.target.value;
+                        selectedProject['goalAmount'] = event.target.value;
                         updateProject(selectedProject);
                     }}
                     name='goalamount'
@@ -146,7 +146,8 @@ export default class extends Component {
                       type="text"
                       className={`isoAccountInput projectaccount`}
                       onChange={event => {
-                          selectedProject['projectaccount'] = event.target.value;
+                          selectedProject['creatorAddress'] = event.target.value;
+                          selectedProject['receiverAddress'] = event.target.value;
                           updateProject(selectedProject);
                       }}
                       name='projectaccount'

@@ -13,12 +13,13 @@ import { ButtonWrapper } from '../../../components/card/cardModal.style';
 import {
     DateRangePicker,
   } from '../../../components/uielements/reactDates';
+import moment from 'moment';
 import configs from './dateconfig';
 import SimpleTable from '../../Tables/antTables/tableViews/simpleView';
 import { createColumns } from './fakeconfig';
 import * as fetchdata from './fetchdata';
 
-const { addCard, editCard, deleteCard, restoreCards } = cardActions;
+const { addCard, editCard, deleteCard, restoreCards, requestCards } = cardActions;
 class Projects extends Component {
     constructor(props) {
         super(props);
@@ -55,19 +56,22 @@ class Projects extends Component {
           editView: true,
           selectedProject: {
             id: new Date().getTime(),
+            appId: new Date().getTime(),
             key: new Date().getTime(),
             name: '',
             description: '',
-            videourl: '',
+            videoUrl: '',
             balance: '0',
-            goalamount: '',
-            currency: '',
-            projectaccount: '',
-            timelimit: '',
+            goalAmount: '',
+            goalAssetId: '',
+            creatorAddress: '',
+            receiverAddress: '',
+            // timelimit: '',
             additional: '',
             investors: [],
             startDate: null,
             endDate: null,
+            closeOutDate: null,
             focusedInput: null,
           },
           modalType: 'add',
@@ -114,6 +118,7 @@ class Projects extends Component {
           onDatesChange: ({ startDate, endDate }) => {
               selectedProject.startDate = startDate // ? startDate.locale('pl').format('LLLL') : null
               selectedProject.endDate = endDate // ? endDate.locale('pl').format('LLLL')  : null
+              selectedProject.closeOutDate = endDate
               this.setState(selectedProject)
           },
           focusedInput: selectedProject.focusedInput,
@@ -139,11 +144,15 @@ class Projects extends Component {
 
     dateToString(cards) {
       cards.forEach((card) => {
-        if(typeof(card.startDate) != "string") {
+        if(moment.isMoment(card.startDate)) {
           card.startDate = card.startDate.locale('pl').format('LLLL');
+        } else {
+          card.startDate = moment.unix(card.startDate/1000).format("MM/DD/YYYY");
         }
-        if(typeof(card.endDate) != "string") {
+        if(moment.isMoment(card.endDate)) {
           card.endDate = card.endDate.locale('pl').format('LLLL');
+        } else {
+          card.endDate = moment.unix(card.endDate/1000).format("MM/DD/YYYY");
         }
       });
 
@@ -151,6 +160,7 @@ class Projects extends Component {
     }
 
     initOptions() {
+      // this.test();
       fetchdata.getAllAssets((res) => {
         let unitsArr = [];
 
@@ -162,10 +172,16 @@ class Projects extends Component {
         this.setState({
           units: unitsArr
         })
-      })
+      });
+    }
+
+    initTableData() {
+      this.props.requestCards();
+      console.log(this.props.cards);
     }
 
     componentDidMount() {
+      this.initTableData();
       this.initOptions();
     }
 
@@ -173,6 +189,7 @@ class Projects extends Component {
         const { rowStyle, colStyle, gutter } = basicStyle;
         const { editView, selectedProject, modalType, units } = this.state;
         const cards = this.dateToString(clone(this.props.cards));
+        // console.log(this.props);
         return (
             <LayoutWrapper>
             <PageHeader>Projects</PageHeader>
@@ -184,6 +201,12 @@ class Projects extends Component {
                         Add New Project
                         </Button>
                     </ButtonWrapper>
+
+                    {/* <ButtonWrapper className="isoButtonWrapper">
+                      <Button type="primary" className="" onClick={this.test()}>
+                        Fetch Funds
+                      </Button>
+                    </ButtonWrapper> */}
 
                     <SimpleTable columns={this.columns} dataSource={cards} />
 
@@ -211,6 +234,8 @@ class Projects extends Component {
 }
 
 function mapStateToProps(state) {
+  // let projects = await state.Projects;
+  // console.log(state);
   return {
     ...state.Projects.toJS(),
   };
@@ -221,4 +246,5 @@ export default connect(mapStateToProps, {
   editCard,
   deleteCard,
   restoreCards,
+  requestCards,
 })(Projects);

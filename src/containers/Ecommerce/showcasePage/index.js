@@ -17,9 +17,10 @@ import Card from '../../../components/paybox';
 import cardActions from '../../../redux/project/actions';
 import Chart from '../../../components/chart';
 import clone from 'clone';
+import moment from 'moment';
 // import { useParams } from 'react-router-dom';
 
-const { addCard, editCard, deleteCard, restoreCards } = cardActions;
+const { addCard, editCard, deleteCard, restoreCards, requestCards } = cardActions;
 class ShowcasePage extends Component {
 
     constructor(props) {
@@ -57,11 +58,15 @@ class ShowcasePage extends Component {
     }
 
     dateToString(project) {
-      if(typeof(project.startDate) != "string") {
+      if(moment.isMoment(project.startDate)) {
         project.startDate = project.startDate.locale('pl').format('LLLL');
+      } else {
+        project.startDate = moment.unix(project.startDate/1000).format("MM/DD/YYYY");
       }
-      if(typeof(project.endDate) != "string") {
+      if(moment.isMoment(project.endDate)) {
         project.endDate = project.endDate.locale('pl').format('LLLL');
+      } else {
+        project.endDate = moment.unix(project.endDate/1000).format("MM/DD/YYYY");
       }
 
       return project;
@@ -100,6 +105,15 @@ class ShowcasePage extends Component {
       return arr;
     }
 
+    initTableData() {
+      this.props.requestCards();
+      // console.log(this.props.cards);
+    }
+
+    componentDidMount() {
+      this.initTableData();
+    }
+
     render() {
         let { id, selectedProject } = this.props;
         const { modalType, paybox, editView } = this.state;
@@ -108,7 +122,7 @@ class ShowcasePage extends Component {
         const marginStyle = {
           margin: rtl === 'rtl' ? '0 0 10px 10px' : '0 10px 10px 0',
         };
-        let p = this.calculatePercentage(selectedProject.balance, selectedProject.goalamount);
+        let p = this.calculatePercentage(selectedProject.balance, selectedProject.goalAmount);
         let bar = p >= 100 ? <Progress percent={100} style={marginStyle} /> :
         <Progress percent={p} status="active" style={marginStyle} />;
         let copy_project = clone(selectedProject);
@@ -123,7 +137,7 @@ class ShowcasePage extends Component {
                       <iframe 
                         width="100%" 
                         height="315" 
-                        src={selectedProject.videourl} 
+                        src={selectedProject.videoUrl} 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; 
                         encrypted-media; gyroscope; picture-in-picture" 
@@ -140,12 +154,12 @@ class ShowcasePage extends Component {
                             <b style={{"font-size": "20px", "color": "#4f4e4e"}}>
                               {<IntlMessages id={"$" + selectedProject.balance + " "} />}
                             </b>
-                            {<IntlMessages id={selectedProject.currency} />} raised
+                            {<IntlMessages id={selectedProject.goalAssetId} />} raised
                           </Col>
                           <Col md={12} sm={12} xs={24} style={{"marginBottom": "16px", "text-align": "right"}}>
                               Goal to 
                             <b style={{"font-size": "20px", "color": "#4f4e4e"}}>
-                              {<IntlMessages id={" $" + selectedProject.goalamount + " "} />}
+                              {<IntlMessages id={" $" + selectedProject.goalAmount + " "} />}
                             </b>
                           </Col>
                         </span>
@@ -223,7 +237,7 @@ class ShowcasePage extends Component {
                           }
                           key="1"
                         >
-                          <div dangerouslySetInnerHTML={{__html: selectedProject.additional ? selectedProject.additional.value : ''}} />
+                          <div dangerouslySetInnerHTML={{__html: selectedProject.additionalHtml ? selectedProject.additionalHtml.value : ''}} />
                         </TabPane>
                         <TabPane
                           tab={
@@ -249,8 +263,10 @@ function mapStateToProps(state, ownProps) {
   const { cards } = {...state.Projects.toJS()};
   const id = ownProps.match.params.id;
   const selectedProject = cards.filter((card) => {
+      console.log(card);
       return card.id == id;
   })[0];
+
 
   return {
     id,
@@ -263,4 +279,5 @@ export default connect(mapStateToProps, {
   editCard,
   deleteCard,
   restoreCards,
+  requestCards,
 })(ShowcasePage);

@@ -43,8 +43,8 @@ export default class extends Component  {
         let formatted;
 
         if (selectedProject) {
-            let startDate = selectedProject['startDate'];
-            let endDate = selectedProject['endDate'];
+            let startDate = moment.unix(selectedProject['startDate']/1000);
+            let endDate = moment.unix(selectedProject['endDate']/1000);
             let startStr = startDate.format('L');
             let now = moment();
             let endStr;

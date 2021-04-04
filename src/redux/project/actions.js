@@ -1,12 +1,28 @@
+import { func } from 'prop-types';
 import { fakedata } from '../../containers/Ecommerce/project/fakeconfig';
+import * as crowdfundServices from '../../api/crowdfundServices';
 const cardActions = {
   CHANGE_CARDS: 'CHANGE_CARDS',
   addCard: card => {
     return (dispatch, getState) => {
-      const cards = [card, ...getState().Projects.get('cards')];
       dispatch({
-        type: cardActions.CHANGE_CARDS,
-        cards
+        type: "FUND_ADD_REQUEST",
+        card
+      });
+    };
+    // return (dispatch, getState) => {
+    //   const cards = [card, ...getState().Projects.get('cards')];
+    //   dispatch({
+    //     type: cardActions.CHANGE_CARDS,
+    //     cards
+    //   });
+    // };
+  },
+  addCardSuccess: (data) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUND_ADD_SUCCESS",
+        data
       });
     };
   },
@@ -47,6 +63,21 @@ const cardActions = {
       type: cardActions.CHANGE_CARDS,
       cards: fakedata
     };
-  }
+  },
+  requestCards: () => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUNDS_FETCH_REQUEST",
+      });
+    };
+  },
+  requestCardsSuccess: (data) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUNDS_FETCH_SUCCESS",
+        cards: data.cards
+      });
+    };
+  },
 };
 export default cardActions;

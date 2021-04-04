@@ -15,8 +15,8 @@ function createColumns(editColumn, deleteColumn, url) {
     },
     {
       title: 'Video',
-      dataIndex: 'videourl',
-      rowKey: 'videourl'
+      dataIndex: 'videoUrl',
+      rowKey: 'videoUrl'
     },
     {
       title: 'Current Balance',
@@ -25,18 +25,18 @@ function createColumns(editColumn, deleteColumn, url) {
     },
     {
       title: 'Goal Amount',
-      dataIndex: 'goalamount',
-      rowKey: 'goalamount'
+      dataIndex: 'goalAmount',
+      rowKey: 'goalAmount'
     },
     {
         title: 'Currency',
-        dataIndex: 'currency',
-        rowKey: 'currency'
+        dataIndex: 'goalAssetId',
+        rowKey: 'goalAssetId'
     },
     {
         title: 'Project Account',
-        dataIndex: 'projectaccount',
-        rowKey: 'projectaccount'
+        dataIndex: 'creatorAddress',
+        rowKey: 'creatorAddress'
     },
     {
         title: 'Start Date',
