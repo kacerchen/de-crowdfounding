@@ -20,12 +20,12 @@ const InputField = InputWrapper(Input);
 
 const selectAfter = (units, selectedProject, updateProject) => {
   let options_template = units.map((unit) => { 
-    return <Option value={unit}>{unit}</Option>
+    return <Option value={unit.id}>{unit.name}</Option>
    });
 
   return <Select 
     onChange={value => {
-      selectedProject['goalAssetId'] = value;
+      selectedProject['goalAssetId'] = parseInt(value);
       updateProject(selectedProject);
     }}
     name='currency'

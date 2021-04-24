@@ -165,8 +165,10 @@ class Projects extends Component {
         let unitsArr = [];
 
         for (let asset of res) {
-          let unit = asset['params']['unit-name'];
-          unitsArr.push(unit);
+          // let unit = asset['params']['unit-name'];
+          let id = asset['assetId'];
+          let name = asset['assetName'];
+          unitsArr.push({ id, name });
         }
 
         this.setState({

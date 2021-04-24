@@ -8,6 +8,7 @@ import Todos from './todos/reducer';
 import Contacts from './contacts/reducer';
 import Cards from './card/reducer';
 import Projects from './project/reducer';
+import Investments from './investment/reducer';
 import DynamicChartComponent from './dynamicEchart/reducer';
 import Ecommerce from './ecommerce/reducer';
 import ThemeSwitcher from './themeSwitcher/reducer';
@@ -28,6 +29,7 @@ export default {
   Contacts,
   Cards,
   Projects,
+  Investments,
   DynamicChartComponent,
   Ecommerce,
   YoutubeSearch,

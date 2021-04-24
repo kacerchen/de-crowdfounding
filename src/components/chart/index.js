@@ -45,7 +45,7 @@ export default class extends Component  {
         if (selectedProject) {
             let startDate = moment.unix(selectedProject['startDate']/1000);
             let endDate = moment.unix(selectedProject['endDate']/1000);
-            let startStr = startDate.format('L');
+            let startStr = startDate.format('l');
             let now = moment();
             let endStr;
 
@@ -55,9 +55,9 @@ export default class extends Component  {
             // let dif = difNow + 1;
             selected_days = difNow + 1;
             if(difNow >= difEnd) {
-                endStr = endDate.format('L');
+                endStr = endDate.format('l');
             } else {
-                endStr = now.format('L');
+                endStr = now.format('l');
             }
 
             formatted = await this.getSource(sampleAccount, selected_days);
@@ -80,7 +80,9 @@ export default class extends Component  {
         data.forEach((arr) => {
             if(arr.includes(start)) {
                 startIndex = data.indexOf(arr);
-            } else if(arr.includes(end)) {
+            }
+            
+            if(arr.includes(end)) {
                 endIndex = data.indexOf(arr);
             }
         });

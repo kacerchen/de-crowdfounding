@@ -15,12 +15,14 @@ import SimpleTable from '../../Tables/antTables/tableViews/simpleView';
 import { ButtonWrapper } from '../../../components/card/cardModal.style';
 import Card from '../../../components/paybox';
 import cardActions from '../../../redux/project/actions';
+import investActions from '../../../redux/investment/actions';
 import Chart from '../../../components/chart';
 import clone from 'clone';
 import moment from 'moment';
 // import { useParams } from 'react-router-dom';
 
 const { addCard, editCard, deleteCard, restoreCards, requestCards } = cardActions;
+const { addInvestment, requestInvestments } = investActions;
 class ShowcasePage extends Component {
 
     constructor(props) {
@@ -90,9 +92,19 @@ class ShowcasePage extends Component {
       });
     }
 
-    updateProject(selectedProject) {
+    updateProject(selectedProject, payObj) {
       let editView =  false;
       let paybox = null;
+
+      this.props.addInvestment({
+        fundId: this.props.id,
+        investorAddress: payObj['payid'],
+        investmentAmount: Number(payObj['amount']),
+      });
+      // this.setState({ editView, paybox });
+      let totalBal = Number(selectedProject['balance']) + Number(payObj['amount']);
+      selectedProject['investors'].push(payObj);
+      selectedProject['balance'] = totalBal;
       this.setState({ selectedProject, editView, paybox });
     }
 
@@ -152,28 +164,30 @@ class ShowcasePage extends Component {
                         <span>
                           <Col md={12} sm={12} xs={24} style={colStyle}>
                             <b style={{"font-size": "20px", "color": "#4f4e4e"}}>
-                              {<IntlMessages id={"$" + selectedProject.balance + " "} />}
+                              {"$" + selectedProject.balance + " "}
                             </b>
-                            {<IntlMessages id={selectedProject.goalAssetId} />} raised
+                            {selectedProject.goalAssetId} raised
                           </Col>
                           <Col md={12} sm={12} xs={24} style={{"marginBottom": "16px", "text-align": "right"}}>
                               Goal to 
                             <b style={{"font-size": "20px", "color": "#4f4e4e"}}>
-                              {<IntlMessages id={" $" + selectedProject.goalAmount + " "} />}
+                              {" $" + selectedProject.goalAmount + " "}
                             </b>
                           </Col>
                         </span>
                       </p>
                       {bar}
-                      <div style={{"margin-top": "4%"}}>
-                        <b>
-                          <span class="material-icons" style={{"font-size": "16px", "margin-right": "2%"}}>flag</span>
-                          Project launched at: 
-                        </b>
-                        <p>
-                          {formattedProject.startDate}
-                        </p>
-                      </div>
+                      <Col md={12} sm={12} xs={24} style={colStyle}>
+                        <div style={{"margin-top": "4%"}}>
+                          <b>
+                            <span class="material-icons" style={{"font-size": "16px", "margin-right": "2%"}}>flag</span>
+                            Project launched at: 
+                          </b>
+                          <p>
+                            {formattedProject.startDate}
+                          </p>
+                        </div>
+                      </Col>
                       <Col md={12} sm={12} xs={24} style={colStyle}>
                         <div style={{"margin-top": "4%"}}>
                           <b>
@@ -263,7 +277,7 @@ function mapStateToProps(state, ownProps) {
   const { cards } = {...state.Projects.toJS()};
   const id = ownProps.match.params.id;
   const selectedProject = cards.filter((card) => {
-      console.log(card);
+      // console.log(card);
       return card.id == id;
   })[0];
 
@@ -280,4 +294,6 @@ export default connect(mapStateToProps, {
   deleteCard,
   restoreCards,
   requestCards,
+  addInvestment, 
+  requestInvestments,
 })(ShowcasePage);

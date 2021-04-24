@@ -57,10 +57,10 @@ export default class extends Component {
 
       const saveButton = () => {
           let { payObj } = this.state;
-          selectedProject['investors'].push(payObj);
-          let newBal = Number(selectedProject['balance']) + Number(payObj['amount']);
-          selectedProject['balance'] = newBal.toString();
-          updateProject(selectedProject);
+          // selectedProject['investors'].push(payObj);
+          // let newBal = Number(selectedProject['balance']) + Number(payObj['amount']);
+          // selectedProject['balance'] = newBal.toString();
+          updateProject(selectedProject, payObj);
       };
 
       const containerId = 'card-wrapper';
@@ -107,7 +107,7 @@ export default class extends Component {
                   name='amount'
                   key='1'
                   addonBefore="$"
-                  addonAfter={selectedProject['currency']}
+                  addonAfter={selectedProject['goalAssetId']}
                 />
             </Form>
           </InfoFormWrapper>

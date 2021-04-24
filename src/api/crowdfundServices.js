@@ -1,14 +1,15 @@
 const axios = require('axios');
 
-const URL = "http://localhost:9000/crowdfund";
+// run command:  lcp --proxyUrl http://localhost:9000 to start proxy
+const URL = "http://localhost:8010/proxy/crowdfund";
 
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
 
 const addFund = (fund) => {
     console.log("service start...");
-    fund.startDate = fund.startDate.unix();
-    fund.endDate = fund.endDate.unix();
-    fund.closeOutDate = fund.closeOutDate.unix();
+    fund.startDate = fund.startDate.unix() * 1000;
+    fund.endDate = fund.endDate.unix() * 1000;
+    fund.closeOutDate = fund.closeOutDate.unix() * 1000;
     console.log(fund);
     
     return new Promise(async(resolve, reject) => {

@@ -6,6 +6,7 @@ import notesSagas from './notes/saga';
 import todosSagas from './todos/saga';
 import cardsSagas from './card/saga';
 import projectSagas from './project/saga';
+import investmentSagas from './investment/saga';
 import youtubeSearchSagas from './youtubeSearch/sagas';
 import devSagas from '../customApp/redux/sagas';
 
@@ -18,6 +19,7 @@ export default function* rootSaga(getState) {
     todosSagas(),
     cardsSagas(),
     projectSagas(),
+    investmentSagas(),
     youtubeSearchSagas(),
     devSagas()
   ]);
