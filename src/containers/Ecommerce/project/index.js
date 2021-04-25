@@ -19,7 +19,15 @@ import SimpleTable from '../../Tables/antTables/tableViews/simpleView';
 import { createColumns } from './fakeconfig';
 import * as fetchdata from './fetchdata';
 
-const { addCard, editCard, deleteCard, restoreCards, requestCards } = cardActions;
+const { 
+  addCard, 
+  editCard, 
+  deleteCard, 
+  restoreCards, 
+  requestCards,
+  requestCardsByAccount, 
+  requestCardsById,
+} = cardActions;
 class Projects extends Component {
     constructor(props) {
         super(props);
@@ -40,6 +48,7 @@ class Projects extends Component {
             modalType: '',
             configsValue: configs,
             units: null,
+            accountId: 'bob$pagoservices.com',
         };
     }
 
@@ -178,7 +187,9 @@ class Projects extends Component {
     }
 
     initTableData() {
-      this.props.requestCards();
+      let account = this.state.accountId;
+      this.props.requestCardsByAccount(account);
+      // this.props.requestCards();
       console.log(this.props.cards);
     }
 
@@ -249,4 +260,6 @@ export default connect(mapStateToProps, {
   deleteCard,
   restoreCards,
   requestCards,
+  requestCardsByAccount,
+  requestCardsById,
 })(Projects);

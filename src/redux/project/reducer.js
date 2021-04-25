@@ -18,6 +18,10 @@ export default function cardReducer(state = initState, action) {
       return state.set('cards', action.cards);
     case 'FUNDS_FETCH_SUCCESS':
       return state.set('cards', action.cards);
+    case 'FUNDS_FETCH_BY_ID_SUCCESS':
+      return state.set('cards', action.cards);
+    case 'FUNDS_FETCH_BY_ACC_SUCCESS':
+      return state.set('cards', action.cards);
     default:
       return state;
   }

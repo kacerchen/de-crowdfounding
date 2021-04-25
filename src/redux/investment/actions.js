@@ -22,11 +22,43 @@ const investActions = {
           });
         };
     },
-    requestCardsSuccess: (data) => {
+    requestInvestmentsSuccess: (data) => {
         return (dispatch, getState) => {
             dispatch({
-            type: "INVESTMENTS_FETCH_SUCCESS",
-            investments: data.investments
+                type: "INVESTMENTS_FETCH_SUCCESS",
+                investments: data.investments
+            });
+        };
+    },
+    requestInvestmentById: investmentId => {
+        return (dispatch, getState) => {
+          dispatch({
+            type: "INVESTMENT_FETCH_BY_ID_REQUEST",
+            investmentId
+          });
+        };
+    },
+    requestInvestmentByIdSuccess: (data) => {
+        return (dispatch, getState) => {
+            dispatch({
+                type: "INVESTMENT_FETCH_BY_ID_SUCCESS",
+                investments: data.investments
+            });
+        };
+    },
+    requestInvestmentsByAccount: account => {
+        return (dispatch, getState) => {
+          dispatch({
+            type: "INVESTMENTS_FETCH_BY_ACC_REQUEST",
+            account
+          });
+        };
+    },
+    requestInvestmentsByAccountSuccess: (data) => {
+        return (dispatch, getState) => {
+            dispatch({
+                type: "INVESTMENTS_FETCH_BY_ACC_SUCCESS",
+                investments: data.investments
             });
         };
     },

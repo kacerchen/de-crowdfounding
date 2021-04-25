@@ -98,8 +98,8 @@ const getFundByAccount = (address) => {
                 fund['balance'] = balance; 
             });
             
-            console.log(funds);
-            resolve(funds);
+            console.log(matched_funds);
+            resolve(matched_funds);
         }))
         .catch((error) => {
             reject(`Error: ${error}`);
@@ -114,10 +114,11 @@ const getFundById = (fundId) => {
             axios.get(`${URL}/investment`)
         ])
         .then(axios.spread((fundList, investmentList) => {
-            let fund = fundList.data.contents;
+            let fund = fundList.data;
             let investments = investmentList.data.contents;
             let investors = [];
             let balance = 0;
+            console.log(fundList);
             const matches = investments.filter(investment => investment.fundId == fund.id);
             if(matches.length != 0) {
                 matches.map((investment) => {
@@ -134,8 +135,8 @@ const getFundById = (fundId) => {
             fund['investors'] = investors;
             fund['balance'] = balance; 
             
-            console.log(fund);
-            resolve(fund);
+            console.log([fund]);
+            resolve([fund]);
         }))
         .catch((error) => {
             reject(`Error: ${error}`);
@@ -176,7 +177,24 @@ const getInvestmentById = (investmentId) => {
         axios.get(`${URL}/investment/${investmentId}`)
         .then(
             (result) => {
-                resolve(result.data.contents);
+                resolve([result.data]);
+            })
+        .catch((error) => {
+            reject(`Error: ${error}`);
+        });
+    });
+}
+
+const getInvestmentByAccount = (address) => {
+    return new Promise(async(resolve, reject) => {
+        axios.get(`${URL}/investment`)
+        .then(
+            (result) => {
+                let all_investments = result.data.contents;
+                let matched_investments = all_investments.filter((investment) => investment.investorAddress == address);
+
+                console.log(matched_investments);
+                resolve(matched_investments);
             })
         .catch((error) => {
             reject(`Error: ${error}`);
@@ -308,9 +326,11 @@ export default {
     addFund,
     getFundList,
     getFundById,
+    getFundByAccount,
     addInvestment,
     getInvestmentList,
     getInvestmentById,
+    getInvestmentByAccount,
     addClaim,
     getClaimList,
     getClaimById,

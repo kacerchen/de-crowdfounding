@@ -13,13 +13,14 @@ import basicStyle from '../../../config/basicStyle';
 import Tags from '../../../components/uielements/tag';
 import TagWrapper from '../../Uielements/Tag/tag.style';
 import ContentHolder from '../../../components/utility/contentHolder';
-import IntlMessages from '../../../components/utility/intlMessages';
+import SimpleTable from '../../Tables/antTables/tableViews/simpleView';
 import Async from '../../../helpers/asyncComponent';
 import Button, { ButtonGroup } from '../../../components/uielements/button';
 import {
     DateRangePicker,
 } from '../../../components/uielements/reactDates';
 import cardActions from '../../../redux/project/actions';
+import investActions from '../../../redux/investment/actions';
 import clone from 'clone';
 import moment from 'moment';
 // import { useParams } from 'react-router-dom';
@@ -55,6 +56,7 @@ const selectAfter = (selectedProject, updateProject) => {
 };
 
 const { addCard, editCard, deleteCard, restoreCards } = cardActions;
+const { requestInvestmentsByAccount } = investActions;
 
 class ProjectPage extends Component {
 
@@ -68,6 +70,20 @@ class ProjectPage extends Component {
             loading: false,
             iconLoading: false,
         };
+
+        this.columns = [
+            {
+              title: 'Backer',
+              dataIndex: 'payid',
+              rowKey: 'payid'
+            },
+            {
+              title: 'Amount',
+              dataIndex: 'amount',
+              rowKey: 'amount'
+            }
+        ];
+
         this.updateProject = this.updateProject.bind(this);
     }
 
@@ -114,6 +130,11 @@ class ProjectPage extends Component {
         }
   
         return card;
+    };
+
+    getInvestors() {
+        let investments = this.selectedProject['investors'];
+        return investments;
     }
 
     render() {
@@ -189,7 +210,7 @@ class ProjectPage extends Component {
                             </InfoFormWrapper>
                         </Col>
                         <Col md={12} sm={12} xs={24} style={colStyle}>
-                            <Row>
+                            {/* <Row>
                                 <CardInfoWrapper id={containerId} className="isoCardWrapper" />
                                 <h4>Classification: </h4>
                                 <ContentHolder>
@@ -198,19 +219,33 @@ class ProjectPage extends Component {
                                     <Tag color="#87d068">#Food</Tag>
                                     <Tag color="#108ee9">#Tech</Tag>
                                 </ContentHolder>
-                            </Row>
+                                
+                            </Row> */}
                             <Row style={{"margin-top": "5%"}}>
-                                <h4>Goal Amount: </h4>
-                                <span>${selectedProject['goalAmount']} {selectedProject['goalAssetId']}</span>
+                                <div style={{"margin-left": "10%"}}>
+                                    <h4>Goal Amount: </h4>
+                                    <span>${selectedProject['goalAmount']} {selectedProject['goalAssetId']}</span>
+                                </div>
                             </Row>
                             <Row style={{"margin-top": "1%"}}>
-                                <h4>Start Date: </h4>
-                                <span>{p['startDate']}</span>
+                                <div style={{"margin-left": "10%"}}>
+                                    <h4>Start Date: </h4>
+                                    <span>{p['startDate']}</span>
+                                </div>
                             </Row>
                             <Row style={{"margin-top": "1%"}}>
-                                <h4>End Date: </h4>
-                                <span>{p['endDate']}</span>
+                                <div style={{"margin-left": "10%"}}>
+                                    <h4>End Date: </h4>
+                                    <span>{p['endDate']}</span>
+                                </div>
                             </Row>
+                        </Col>
+                    </Row>
+                    <Row style={rowStyle} gutter={gutter} justify="start">
+                        <Col md={12} sm={12} xs={24} style={colStyle}>
+                            <div style={{"margin": "10% 0% 0% 0%"}}>
+                            <SimpleTable columns={this.columns} dataSource={selectedProject['investors']} />
+                            </div>
                         </Col>
                     </Row>
                     <Row style={rowStyle} gutter={gutter} justify="start">
@@ -262,4 +297,5 @@ export default connect(mapStateToProps, {
     editCard,
     deleteCard,
     restoreCards,
+    requestInvestmentsByAccount,
 })(ProjectPage);

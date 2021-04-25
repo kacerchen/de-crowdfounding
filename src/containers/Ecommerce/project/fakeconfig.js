@@ -1,6 +1,8 @@
 import React from 'react';
 import { DeleteCell, EditableCell, EditCell } from '../../Tables/antTables/helperCells';
 import moment from 'moment';
+import Button from '../../../components/uielements/button';
+// import { Button } from 'antd';
 function createColumns(editColumn, deleteColumn, url) {
   return [
     {
@@ -58,6 +60,19 @@ function createColumns(editColumn, deleteColumn, url) {
             linkto={url}
           />
         </span>
+    },
+    {
+      title: '',
+      rowKey: 'action',
+      render: (text, record) => {
+        // <ButtonWrapper className="isoButtonWrapper">
+        // </ButtonWrapper>
+        return (
+          <Button type="primary" onClick={console.log('click')}>
+            Claim
+          </Button>
+        )
+      }
     },
     {
       title: '',

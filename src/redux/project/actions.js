@@ -79,5 +79,37 @@ const cardActions = {
       });
     };
   },
+  requestCardsById: fundId => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUNDS_FETCH_BY_ID_REQUEST",
+        fundId
+      });
+    };
+  },
+  requestCardsByIdSuccess: (data) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUNDS_FETCH_BY_ID_SUCCESS",
+        cards: data.cards
+      });
+    };
+  },
+  requestCardsByAccount: account => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUNDS_FETCH_BY_ACC_REQUEST",
+        account
+      });
+    };
+  },
+  requestCardsByAccountSuccess: (data) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: "FUNDS_FETCH_BY_ACC_SUCCESS",
+        cards: data.cards
+      });
+    };
+  },
 };
 export default cardActions;
