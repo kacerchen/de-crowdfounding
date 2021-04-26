@@ -7,6 +7,9 @@ import todosSagas from './todos/saga';
 import cardsSagas from './card/saga';
 import projectSagas from './project/saga';
 import investmentSagas from './investment/saga';
+import claimSagas from './claim/saga';
+import reclaimSagas from './reclaim/saga';
+import closeoutSagas from './closeout/saga';
 import youtubeSearchSagas from './youtubeSearch/sagas';
 import devSagas from '../customApp/redux/sagas';
 
@@ -20,6 +23,9 @@ export default function* rootSaga(getState) {
     cardsSagas(),
     projectSagas(),
     investmentSagas(),
+    claimSagas(),
+    reclaimSagas(),
+    closeoutSagas(),
     youtubeSearchSagas(),
     devSagas()
   ]);

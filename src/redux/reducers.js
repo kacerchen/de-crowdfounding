@@ -9,6 +9,9 @@ import Contacts from './contacts/reducer';
 import Cards from './card/reducer';
 import Projects from './project/reducer';
 import Investments from './investment/reducer';
+import Claims from './claim/reducer';
+import Reclaims from './reclaim/reducer';
+import Closeouts from './closeout/reducer';
 import DynamicChartComponent from './dynamicEchart/reducer';
 import Ecommerce from './ecommerce/reducer';
 import ThemeSwitcher from './themeSwitcher/reducer';
@@ -30,6 +33,9 @@ export default {
   Cards,
   Projects,
   Investments,
+  Claims,
+  Reclaims,
+  Closeouts,
   DynamicChartComponent,
   Ecommerce,
   YoutubeSearch,

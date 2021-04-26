@@ -234,7 +234,24 @@ const getClaimById = (claimId) => {
     return new Promise(async(resolve, reject) => {
         axios.get(`${URL}/claim/${claimId}`).then(
             (result) => {
-                resolve(result.data.contents);
+                resolve([result.data]);
+            })
+        .catch((error) => {
+            reject(`Error: ${error}`);
+        });
+    });
+}
+
+const getClaimByAccount = (address) => {
+    return new Promise(async(resolve, reject) => {
+        axios.get(`${URL}/claim`)
+        .then(
+            (result) => {
+                let all_claims = result.data.contents;
+                let matched_claims = all_claims.filter((claim) => claim.receiverAddress == address);
+
+                console.log(matched_claims);
+                resolve(matched_claims);
             })
         .catch((error) => {
             reject(`Error: ${error}`);
@@ -274,7 +291,24 @@ const getReclaimById = (reclaimId) => {
     return new Promise(async(resolve, reject) => {
         axios.get(`${URL}/reclaim/${reclaimId}`).then(
             (result) => {
-                resolve(result.data.contents);
+                resolve([result.data]);
+            })
+        .catch((error) => {
+            reject(`Error: ${error}`);
+        });
+    });
+}
+
+const getReclaimByAccount = (address) => {
+    return new Promise(async(resolve, reject) => {
+        axios.get(`${URL}/reclaim`)
+        .then(
+            (result) => {
+                let all_reclaims = result.data.contents;
+                let matched_reclaims = all_reclaims.filter((reclaim) => reclaim.investorAddress == address);
+
+                console.log(matched_reclaims);
+                resolve(matched_reclaims);
             })
         .catch((error) => {
             reject(`Error: ${error}`);
@@ -314,7 +348,24 @@ const getCloseoutById = async (closeoutId) => {
     return new Promise(async(resolve, reject) => {
         axios.get(`${URL}/closeout/${closeoutId}`).then(
             (result) => {
-              resolve(result.data.contents);
+              resolve([result.data]);
+            })
+        .catch((error) => {
+            reject(`Error: ${error}`);
+        });
+    });
+}
+
+const getCloseoutByAccount = (address) => {
+    return new Promise(async(resolve, reject) => {
+        axios.get(`${URL}/closeout`)
+        .then(
+            (result) => {
+                let all_closeouts = result.data.contents;
+                let matched_closeouts = all_closeouts.filter((closeout) => closeout.closeoutAddress == address);
+
+                console.log(matched_closeouts);
+                resolve(matched_closeouts);
             })
         .catch((error) => {
             reject(`Error: ${error}`);
@@ -334,12 +385,15 @@ export default {
     addClaim,
     getClaimList,
     getClaimById,
+    getClaimByAccount,
     addReclaim,
     getReclaimList,
     getReclaimById,
+    getReclaimByAccount,
     addCloseout,
     getCloseoutList,
-    getCloseoutById
+    getCloseoutById,
+    getCloseoutByAccount,
 }
 
 // let test_fund = {
