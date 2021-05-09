@@ -1,4 +1,4 @@
-import { fakedata } from '../../containers/Ecommerce/card/config';
+import { fakedata } from '../../containers/Creator/card/config';
 const cardActions = {
   CHANGE_CARDS: 'CHANGE_CARDS',
   addCard: card => {

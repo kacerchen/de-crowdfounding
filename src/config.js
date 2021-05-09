@@ -2,9 +2,9 @@ export default {
   apiUrl: 'http://joeylin.net/api/',
 };
 const siteConfig = {
-  siteName: 'joeylin.net',
+  siteName: 'crowdfund.pago',
   siteIcon: 'ion-beer',
-  footerText: 'Isomorphic ©2017 Created with LOVE by Joey Lin',
+  footerText: 'Decentralized Crowdfund Platform ©2021 Created by Pago',
 };
 
 const themeConfig = {
@@ -27,7 +27,7 @@ const Auth0Config = {
       redirect: false,
     },
     languageDictionary: {
-      title: 'joeylin.net',
+      title: 'crowdfund.pago',
       emailInputPlaceholder: 'demo@gmail.com',
       passwordInputPlaceholder: 'demodemo',
     },

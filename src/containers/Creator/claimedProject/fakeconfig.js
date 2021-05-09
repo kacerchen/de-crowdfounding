@@ -2,8 +2,8 @@ import React from 'react';
 import { DeleteCell, EditableCell, EditCell } from '../../Tables/antTables/helperCells';
 import moment from 'moment';
 import Button from '../../../components/uielements/button';
-// import { Button } from 'antd';
-function createColumns(editColumn, deleteColumn, url) {
+
+function createColumns(addClaimColumn, addCloseoutColumn, deleteColumn, url) {
   return [
     {
       title: 'Project Name',
@@ -51,6 +51,11 @@ function createColumns(editColumn, deleteColumn, url) {
         rowKey: 'endDate'
     },
     {
+      title: 'Closeout Date',
+      dataIndex: 'closeOutDate',
+      rowKey: 'closeOutDate'
+    },
+    {
       title: '',
       rowKey: 'action',
       render: (text, record) =>
@@ -65,10 +70,25 @@ function createColumns(editColumn, deleteColumn, url) {
       title: '',
       rowKey: 'action',
       render: (text, record) => {
-        // <ButtonWrapper className="isoButtonWrapper">
-        // </ButtonWrapper>
+        let claim = {
+          fundId: record.id,
+          receiverAddress: record.creatorAddress,
+          claimAmount: record.balance
+        };
+
+        const isReady = (project) => {
+          let { balance, goalAmount, endDate } = project;
+          let date = moment(endDate).unix() * 1000;
+          let now = moment().unix() * 1000;
+          if(balance >= goalAmount && now >= date) {
+            return false;
+          }
+
+          return true;
+        }
+
         return (
-          <Button type="primary" onClick={console.log('click')}>
+          <Button type="primary" disabled={isReady(record)} onClick={() => addClaimColumn(claim)}>
             Claim
           </Button>
         )
@@ -77,15 +97,43 @@ function createColumns(editColumn, deleteColumn, url) {
     {
       title: '',
       rowKey: 'action',
-      render: (text, record) =>
-        <span>
-          <DeleteCell
-            onDeleteCell={() => {
-              deleteColumn(record);
-            }}
-          />
-        </span>
-    }
+      render: (text, record) => {
+        let closeout = {
+          fundId: record.id,
+          closeoutAddress: record.creatorAddress,
+          closeoutAmount: record.balance
+        };
+
+        const isReady = (project) => {
+          let { closeOutDate } = project;
+          let date = moment(closeOutDate).unix() * 1000;
+          let now = moment().unix() * 1000;
+          if(now >= date) {
+            return false;
+          }
+
+          return true;
+        }
+
+        return (
+          <Button type="primary" disabled={isReady(record)} onClick={() => addCloseoutColumn(closeout)}>
+            Closeout
+          </Button>
+        )
+      }
+    },
+    // {
+    //   title: '',
+    //   rowKey: 'action',
+    //   render: (text, record) =>
+    //     <span>
+    //       <DeleteCell
+    //         onDeleteCell={() => {
+    //           deleteColumn(record);
+    //         }}
+    //       />
+    //     </span>
+    // }
   ];
 }
 

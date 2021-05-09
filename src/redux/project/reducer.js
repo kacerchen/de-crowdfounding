@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { fakedata } from '../../containers/Ecommerce/project/fakeconfig';
+import { fakedata } from '../../containers/Creator/project/fakeconfig';
 import cardActions from './actions';
 import { func } from 'prop-types';
 

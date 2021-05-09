@@ -2,7 +2,7 @@ import { Map } from 'immutable';
 import clone from 'clone';
 import actions from './actions';
 import fake from './fake';
-import fakeinitdata from '../../containers/Ecommerce/cart/config';
+import fakeinitdata from '../../containers/Creator/cart/config';
 
 var fakeData = fakeinitdata;
 

@@ -136,7 +136,7 @@ class Sidebar extends Component {
               onOpenChange={this.onOpenChange}
               className="isoDashboardMenu"
             >
-              <Menu.Item key="mailbox">
+              {/* <Menu.Item key="mailbox">
                 <Link to={`${url}/mailbox`}>
                   <span className="isoMenuHolder" style={submenuColor}>
                     <i className="ion-android-mail" />
@@ -145,22 +145,51 @@ class Sidebar extends Component {
                     </span>
                   </span>
                 </Link>
+              </Menu.Item> */}
+
+              <Menu.Item key="showcase">
+                <Link to={`${url}/showcase`}>
+                <span className="isoMenuHolder" style={submenuColor}>
+                    {/* <i className="ion-android-mail" /> */}
+                    <i className="ion-grid" />
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.showcase" />
+                    </span>
+                </span>
+                </Link>
               </Menu.Item>
 
               <SubMenu
-                key="ecommerce"
+                key="creator"
                 title={
                   <span className="isoMenuHolder" style={submenuColor}>
-                    <i className="ion-bag" />
+                    {/* <i className="ion-bag" /> */}
+                    <i className="ion-flash" />
                     <span className="nav-text">
-                      <IntlMessages id="sidebar.ecommerce" />
+                      <IntlMessages id="sidebar.creator" />
                     </span>
                   </span>
                 }
               >
-                <Menu.Item style={submenuStyle} key="shop">
+                {/* <Menu.Item style={submenuStyle} key="shop">
                   <Link style={submenuColor} to={`${url}/shop`}>
                     <IntlMessages id="sidebar.shop" />
+                  </Link>
+                </Menu.Item> */}
+                
+                <Menu.Item style={submenuStyle} key="project">
+                  <Link style={submenuColor} to={`${url}/project`}>
+                    <IntlMessages id="sidebar.projects" />
+                  </Link>
+                </Menu.Item>
+                <Menu.Item style={submenuStyle} key="claimedProject">
+                  <Link style={submenuColor} to={`${url}/claimedProject`}>
+                    <IntlMessages id="sidebar.claimedProject" />
+                  </Link>
+                </Menu.Item>
+                <Menu.Item style={submenuStyle} key="closeoutProject">
+                  <Link style={submenuColor} to={`${url}/closeoutProject`}>
+                    <IntlMessages id="sidebar.closeoutProject" />
                   </Link>
                 </Menu.Item>
                 <Menu.Item style={submenuStyle} key="portfolio">
@@ -168,12 +197,7 @@ class Sidebar extends Component {
                     <IntlMessages id="sidebar.portfolio" />
                   </Link>
                 </Menu.Item>
-                <Menu.Item style={submenuStyle} key="showcase">
-                  <Link style={submenuColor} to={`${url}/showcase`}>
-                    <IntlMessages id="sidebar.showcase" />
-                  </Link>
-                </Menu.Item>
-                <Menu.Item style={submenuStyle} key="cart">
+                {/* <Menu.Item style={submenuStyle} key="cart">
                   <Link style={submenuColor} to={`${url}/cart`}>
                     <IntlMessages id="sidebar.cart" />
                   </Link>
@@ -187,10 +211,28 @@ class Sidebar extends Component {
                   <Link style={submenuColor} to={`${url}/card`}>
                     <IntlMessages id="sidebar.cards" />
                   </Link>
+                </Menu.Item> */}
+              </SubMenu>
+
+              <SubMenu
+                key="investor"
+                title={
+                  <span className="isoMenuHolder" style={submenuColor}>
+                    <i className="ion-arrow-graph-up-right" />
+                    <span className="nav-text">
+                      <IntlMessages id="sidebar.investor" />
+                    </span>
+                  </span>
+                }
+              >
+                <Menu.Item style={submenuStyle} key="investedProject">
+                  <Link style={submenuColor} to={`${url}/investedProject`}>
+                    <IntlMessages id="sidebar.investedProject" />
+                  </Link>
                 </Menu.Item>
-                <Menu.Item style={submenuStyle} key="project">
-                  <Link style={submenuColor} to={`${url}/project`}>
-                    <IntlMessages id="sidebar.projects" />
+                <Menu.Item style={submenuStyle} key="reclaimedProject">
+                  <Link style={submenuColor} to={`${url}/reclaimedProject`}>
+                    <IntlMessages id="sidebar.reclaimedProject" />
                   </Link>
                 </Menu.Item>
               </SubMenu>

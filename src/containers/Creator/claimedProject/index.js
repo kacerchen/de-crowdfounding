@@ -8,6 +8,8 @@ import Box from '../../../components/utility/box';
 import LayoutWrapper from '../../../components/utility/layoutWrapper';
 import Card from '../../../components/project';
 import cardActions from '../../../redux/project/actions';
+import claimActions from '../../../redux/claim/actions';
+import closeoutActions from '../../../redux/closeout/actions';
 import basicStyle from '../../../config/basicStyle';
 import { ButtonWrapper } from '../../../components/card/cardModal.style';
 import {
@@ -28,9 +30,20 @@ const {
   requestCardsByAccount, 
   requestCardsById,
 } = cardActions;
+
+const {
+  addClaim,
+} = claimActions;
+
+const {
+  addCloseout,
+} = closeoutActions;
+
 class Projects extends Component {
     constructor(props) {
         super(props);
+        this.addClaimColumn = this.addClaimColumn.bind(this);
+        this.addCloseoutColumn = this.addCloseoutColumn.bind(this);
         this.addColumn = this.addColumn.bind(this);
         this.editColumn = this.editColumn.bind(this);
         this.submitProject = this.submitProject.bind(this);
@@ -40,7 +53,7 @@ class Projects extends Component {
 
         const url = this.props.location.pathname;
 
-        this.columns = createColumns(this.editColumn, this.props.deleteCard, url);
+        this.columns = createColumns(this.addClaimColumn, this.addCloseoutColumn, this.props.deleteCard, url);
 
         this.state = {
             editView: false,
@@ -50,6 +63,16 @@ class Projects extends Component {
             units: null,
             accountId: 'bob$pagoservices.com',
         };
+    }
+
+    addClaimColumn(claim) {
+      console.log(claim);
+      this.props.addClaim(claim);
+    }
+
+    addCloseoutColumn(closeout) {
+      console.log(closeout);
+      this.props.addCloseout(closeout);
     }
 
     editColumn(project) {
@@ -163,6 +186,11 @@ class Projects extends Component {
         } else {
           card.endDate = moment.unix(card.endDate/1000).format("MM/DD/YYYY");
         }
+        if(moment.isMoment(card.closeOutDate)) {
+          card.closeOutDate = card.closeOutDate.locale('pl').format('LLLL');
+        } else {
+          card.closeOutDate = moment.unix(card.closeOutDate/1000).format("MM/DD/YYYY");
+        }
       });
 
       return cards;
@@ -262,4 +290,6 @@ export default connect(mapStateToProps, {
   requestCards,
   requestCardsByAccount,
   requestCardsById,
+  addClaim,
+  addCloseout,
 })(Projects);

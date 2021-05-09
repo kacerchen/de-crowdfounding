@@ -298,49 +298,69 @@ class AppRouter extends React.Component {
         />
         <Route
           exact
+          path={`${url}/investedProject`}
+          component={asyncComponent(() => import('../Investor/investedProject'))}
+        />
+        <Route
+          exact
+          path={`${url}/reclaimedProject`}
+          component={asyncComponent(() => import('../Investor/reclaimedProject'))}
+        />
+        <Route
+          exact
           path={`${url}/card`}
-          component={asyncComponent(() => import('../Ecommerce/card'))}
+          component={asyncComponent(() => import('../Creator/card'))}
         />
         <Route
           exact
           path={`${url}/cart`}
-          component={asyncComponent(() => import('../Ecommerce/cart'))}
+          component={asyncComponent(() => import('../Creator/cart'))}
         />
         <Route
           exact
           path={`${url}/checkout`}
-          component={asyncComponent(() => import('../Ecommerce/checkout'))}
+          component={asyncComponent(() => import('../Creator/checkout'))}
         />
         <Route
           exact
           path={`${url}/portfolio`}
-          component={asyncComponent(() => import('../Ecommerce/portfolio'))}
+          component={asyncComponent(() => import('../Creator/portfolio'))}
         />
         <Route
           exact
           path={`${url}/project`}
-          component={asyncComponent(() => import('../Ecommerce/project'))}
+          component={asyncComponent(() => import('../Creator/project'))}
         />
         <Route
           exact
           path={`${url}/project/:id`}
-          component={asyncComponent(() => import('../Ecommerce/projectPage'))}
+          component={asyncComponent(() => import('../Creator/projectPage'))}
         />
         <Route
           exact
           path={`${url}/showcase`}
-          component={asyncComponent(() => import('../Ecommerce/showcase'))}
+          component={asyncComponent(() => import('../Creator/showcase'))}
         />
         <Route
           exact
           path={`${url}/showcase/:id`}
-          component={asyncComponent(() => import('../Ecommerce/showcasePage'))}
+          component={asyncComponent(() => import('../Creator/showcasePage'))}
+        />
+        <Route
+          exact
+          path={`${url}/claimedProject`}
+          component={asyncComponent(() => import('../Creator/claimedProject'))}
+        />
+        <Route
+          exact
+          path={`${url}/closeoutProject`}
+          component={asyncComponent(() => import('../Creator/closedProject'))}
         />
         <Route
           exact
           path={`${url}/shop`}
           component={asyncComponent(() =>
-            import('../Ecommerce/algolia/instantSearch')
+            import('../Creator/algolia/instantSearch')
           )}
         />
         <Route

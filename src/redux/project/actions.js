@@ -1,5 +1,5 @@
 import { func } from 'prop-types';
-import { fakedata } from '../../containers/Ecommerce/project/fakeconfig';
+import { fakedata } from '../../containers/Creator/project/fakeconfig';
 import * as crowdfundServices from '../../api/crowdfundServices';
 const cardActions = {
   CHANGE_CARDS: 'CHANGE_CARDS',
