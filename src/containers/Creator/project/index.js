@@ -175,6 +175,10 @@ class Projects extends Component {
     }
 
     dateToString(cards) {
+      if(cards == undefined) {
+        return [];
+      }
+
       cards.forEach((card) => {
         if(moment.isMoment(card.startDate)) {
           card.startDate = card.startDate.locale('pl').format('LLLL');
@@ -229,7 +233,7 @@ class Projects extends Component {
     render(){
         const { rowStyle, colStyle, gutter } = basicStyle;
         const { editView, selectedProject, modalType, units } = this.state;
-        const cards = this.dateToString(clone(this.props.cards));
+        const cards = this.dateToString(clone(this.props.cards_byAcc));
         // console.log(this.props);
         return (
             <LayoutWrapper>

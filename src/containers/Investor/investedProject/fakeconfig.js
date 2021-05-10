@@ -3,121 +3,68 @@ import { DeleteCell, EditableCell, EditCell } from '../../Tables/antTables/helpe
 import moment from 'moment';
 import Button from '../../../components/uielements/button';
 
-function createColumns(addClaimColumn, addCloseoutColumn, deleteColumn, url) {
+function createColumns(addReclaimColumn, url) {
   return [
     {
-      title: 'Project Name',
-      dataIndex: 'name',
-      rowKey: 'name'
+      title: 'Investment ID',
+      dataIndex: 'id',
+      rowKey: 'id'
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      rowKey: 'description'
+      title: 'Project ID',
+      dataIndex: 'fundId',
+      rowKey: 'fundId'
     },
     {
-      title: 'Video',
-      dataIndex: 'videoUrl',
-      rowKey: 'videoUrl'
+      title: 'Investor',
+      dataIndex: 'investorAddress',
+      rowKey: 'investorAddress'
     },
     {
-      title: 'Current Balance',
-      dataIndex: 'balance',
-      rowKey: 'balance'
+      title: 'Invest Amount',
+      dataIndex: 'investmentAmount',
+      rowKey: 'investmentAmount'
     },
     {
-      title: 'Goal Amount',
-      dataIndex: 'goalAmount',
-      rowKey: 'goalAmount'
+        title: 'Creation Date',
+        dataIndex: 'creationDate',
+        rowKey: 'creationDate'
     },
     {
-        title: 'Currency',
-        dataIndex: 'goalAssetId',
-        rowKey: 'goalAssetId'
+      title: 'Note',
+      dataIndex: 'note',
+      rowKey: 'note'
     },
     {
-        title: 'Project Account',
-        dataIndex: 'creatorAddress',
-        rowKey: 'creatorAddress'
-    },
-    {
-        title: 'Start Date',
-        dataIndex: 'startDate',
-        rowKey: 'startDate'
-    },
-    {
-        title: 'End Date',
-        dataIndex: 'endDate',
-        rowKey: 'endDate'
-    },
-    {
-      title: 'Closeout Date',
-      dataIndex: 'closeOutDate',
-      rowKey: 'closeOutDate'
-    },
-    {
-      title: '',
-      rowKey: 'action',
-      render: (text, record) =>
-        <span>
-          <EditCell
-            project={record}
-            linkto={url}
-          />
-        </span>
+        title: 'Status',
+        dataIndex: 'investmentState',
+        rowKey: 'investmentState'
     },
     {
       title: '',
       rowKey: 'action',
       render: (text, record) => {
-        let claim = {
-          fundId: record.id,
-          receiverAddress: record.creatorAddress,
-          claimAmount: record.balance
+        let reclaim = {
+          fundId: record.fundId,
+          investorAddress: record.investorAddress,
+          reclaimAmount: record.investmentAmount
         };
 
-        const isReady = (project) => {
-          let { balance, goalAmount, endDate } = project;
-          let date = moment(endDate).unix() * 1000;
-          let now = moment().unix() * 1000;
-          if(balance >= goalAmount && now >= date) {
-            return false;
-          }
+        const isReady = (reclaim) => {
+          // let { balance, goalAmount, endDate } = reclaim.project;
+          // let date = moment(endDate).unix() * 1000;
+          // let now = moment().unix() * 1000;
+          // if(balance >= goalAmount && now >= date) {
+          //   return true;
+          // }
 
+          // return false;
           return true;
         }
 
         return (
-          <Button type="primary" disabled={isReady(record)} onClick={() => addClaimColumn(claim)}>
-            Claim
-          </Button>
-        )
-      }
-    },
-    {
-      title: '',
-      rowKey: 'action',
-      render: (text, record) => {
-        let closeout = {
-          fundId: record.id,
-          closeoutAddress: record.creatorAddress,
-          closeoutAmount: record.balance
-        };
-
-        const isReady = (project) => {
-          let { closeOutDate } = project;
-          let date = moment(closeOutDate).unix() * 1000;
-          let now = moment().unix() * 1000;
-          if(now >= date) {
-            return false;
-          }
-
-          return true;
-        }
-
-        return (
-          <Button type="primary" disabled={isReady(record)} onClick={() => addCloseoutColumn(closeout)}>
-            Closeout
+          <Button type="primary" disabled={isReady(record)} onClick={() => addReclaimColumn(reclaim)}>
+            Reclaim
           </Button>
         )
       }
@@ -127,10 +74,9 @@ function createColumns(addClaimColumn, addCloseoutColumn, deleteColumn, url) {
     //   rowKey: 'action',
     //   render: (text, record) =>
     //     <span>
-    //       <DeleteCell
-    //         onDeleteCell={() => {
-    //           deleteColumn(record);
-    //         }}
+    //       <EditCell
+    //         project={record}
+    //         linkto={url}
     //       />
     //     </span>
     // }
@@ -139,68 +85,58 @@ function createColumns(addClaimColumn, addCloseoutColumn, deleteColumn, url) {
 
 const fakedata = [
   {
-    id: 3,
+    id: "1",
     key: 1,
-    name: 'Project A',
-    description: 'Nulla vitae elit libero, a pharetra augue.',
-    videourl: 'https://www.youtube.com/embed/EngW7tLk6R8',
-    balance: '1900',
-    goalamount: '30000',
-    currency: 'USD',
-    projectaccount: '**************************',
-    startDate: moment("20201108", "YYYYMMDD"),
-    endDate: moment("20201231", "YYYYMMDD"),
-    additional: '',
-    investors: [
-      {
-        payid: 'kris$pagoservices.com',
-        amount: '123'
-      }
-    ]
+    fundId: "1",
+    investorAddress: "bob$pagoservices.com",
+    investmentAmount: 750,
+    creationDate: 1620517416733,
+    note: null,
+    investmentState: null
   },
-  {
-    id: 2,
-    key: 2,
-    name: 'Project B',
-    description: 'Nullam id dolor id nibh ultricies vehicula ut id elit.',
-    videourl: 'https://www.youtube.com/embed/HjxYvcdpVnU',
-    balance: '5000',
-    goalamount: '10000',
-    currency: 'ALGO',
-    projectaccount: '**************************',
-    startDate: moment("20201108", "YYYYMMDD"),
-    endDate: moment("20210121", "YYYYMMDD"),
-    additional: '',
-    investors: [
-      {
-        payid: 'kathy$pagoservices.com',
-        amount: '56'
-      }
-    ]
-  },
-  {
-    id: 1,
-    key: 3,
-    name: 'Project C',
-    description: 'Nulla vitae elit libero, a pharetra augue.',
-    videourl: 'https://www.youtube.com/embed/K4TOrB7at0Y',
-    balance: '30000',
-    goalamount: '5000',
-    currency: 'USDC',
-    projectaccount: '**************************',
-    startDate: moment("20201108", "YYYYMMDD"),
-    endDate: moment("20201210", "YYYYMMDD"),
-    additional: '',
-    investors: [
-      {
-        payid: 'alice$pagoservices.com',
-        amount: '1000'
-      },
-      {
-        payid: 'bob$pagoservices.com',
-        amount: '29000'
-      }
-    ]
-  }
+  // {
+  //   id: 2,
+  //   key: 2,
+  //   name: 'Project B',
+  //   description: 'Nullam id dolor id nibh ultricies vehicula ut id elit.',
+  //   videourl: 'https://www.youtube.com/embed/HjxYvcdpVnU',
+  //   balance: '5000',
+  //   goalamount: '10000',
+  //   currency: 'ALGO',
+  //   projectaccount: '**************************',
+  //   startDate: moment("20201108", "YYYYMMDD"),
+  //   endDate: moment("20210121", "YYYYMMDD"),
+  //   additional: '',
+  //   investors: [
+  //     {
+  //       payid: 'kathy$pagoservices.com',
+  //       amount: '56'
+  //     }
+  //   ]
+  // },
+  // {
+  //   id: 1,
+  //   key: 3,
+  //   name: 'Project C',
+  //   description: 'Nulla vitae elit libero, a pharetra augue.',
+  //   videourl: 'https://www.youtube.com/embed/K4TOrB7at0Y',
+  //   balance: '30000',
+  //   goalamount: '5000',
+  //   currency: 'USDC',
+  //   projectaccount: '**************************',
+  //   startDate: moment("20201108", "YYYYMMDD"),
+  //   endDate: moment("20201210", "YYYYMMDD"),
+  //   additional: '',
+  //   investors: [
+  //     {
+  //       payid: 'alice$pagoservices.com',
+  //       amount: '1000'
+  //     },
+  //     {
+  //       payid: 'bob$pagoservices.com',
+  //       amount: '29000'
+  //     }
+  //   ]
+  // }
 ];
 export { createColumns, fakedata };

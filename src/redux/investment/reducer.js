@@ -1,10 +1,10 @@
 import { Map } from 'immutable';
 import investActions from './actions';
 
-const investments = {};
+const _default = {};
 
 const initState = new Map({
-    investments
+    investments: _default
 });
 
 export default function investReducer(state = initState, action) {

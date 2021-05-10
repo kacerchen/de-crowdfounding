@@ -25,18 +25,18 @@ function* fetchInvestments(action) {
 function* fetchInvestmentById(action) {
     try {
        const investment = yield call(crowdfundServices.default.getInvestmentById, action.investmentId);
-       yield put({type: "INVESTMENTS_FETCH_SUCCESS", investments: investment});
+       yield put({type: "INVESTMENT_FETCH_BY_ID_SUCCESS", investments: investment});
     } catch (e) {
-       yield put({type: "INVESTMENTS_FETCH_FAILED", message: e.message});
+       yield put({type: "INVESTMENT_FETCH_BY_ID_FAILED", message: e.message});
     }
 }
 
 function* fetchInvestmentByAccount(action) {
     try {
        const investments = yield call(crowdfundServices.default.getInvestmentByAccount, action.account);
-       yield put({type: "INVESTMENTS_FETCH_SUCCESS", investments});
+       yield put({type: "INVESTMENTS_FETCH_BY_ACC_SUCCESS", investments});
     } catch (e) {
-       yield put({type: "INVESTMENTS_FETCH_FAILED", message: e.message});
+       yield put({type: "INVESTMENTS_FETCH_BY_ACC_FAILED", message: e.message});
     }
 }
 
