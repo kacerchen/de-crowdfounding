@@ -50,16 +50,16 @@ function createColumns(addReclaimColumn, url) {
           reclaimAmount: record.investmentAmount
         };
 
-        const isReady = (reclaim) => {
-          // let { balance, goalAmount, endDate } = reclaim.project;
-          // let date = moment(endDate).unix() * 1000;
-          // let now = moment().unix() * 1000;
-          // if(balance >= goalAmount && now >= date) {
-          //   return true;
-          // }
+        const isReady = (record) => {
+          let { balance, goalAmount, endDate } = record.project;
+          let date = moment(endDate).unix() * 1000;
+          let now = moment().unix() * 1000;
+          if(balance >= goalAmount && now >= date) {
+            return false;
+          }
 
-          // return false;
           return true;
+          // return true;
         }
 
         return (

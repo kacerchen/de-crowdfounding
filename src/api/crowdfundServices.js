@@ -190,18 +190,62 @@ const getInvestmentById = (investmentId) => {
 
 const getInvestmentByAccount = (address) => {
     return new Promise(async(resolve, reject) => {
-        axios.get(`${URL}/investment`)
-        .then(
-            (result) => {
-                let all_investments = result.data.contents;
-                let matched_investments = all_investments.filter((investment) => investment.investorAddress == address);
+        axios.all([
+            axios.get(`${URL}/investment`),
+            axios.get(`${URL}/fund`)
+        ])
+        .then(axios.spread((investmentList, fundList) => {
+            let funds = fundList.data.contents;
+            let investments = investmentList.data.contents;
 
-                console.log(matched_investments);
-                resolve(matched_investments);
-            })
+            funds.forEach((fund) => {
+                let investors = [];
+                let balance = 0;
+                const matches = investments.filter(investment => investment.fundId == fund.id);
+
+                if(matches.length != 0) {
+                    matches.map((investment) => {
+                        investors.push(
+                            { 
+                                payid: investment.investorAddress, 
+                                amount: investment.investmentAmount 
+                            }
+                        );
+
+                        balance += investment.investmentAmount;
+                    });
+                }
+                fund['investors'] = investors;
+                fund['balance'] = balance; 
+            });
+
+            let all_funds = funds;
+            let all_investments = investmentList.data.contents;
+            let matched_investments = all_investments.filter((investment) => investment.investorAddress == address);
+            matched_investments.forEach((investment) => {
+                const match = all_funds.find(fund => fund.id == investment.fundId);
+
+                investment['project'] = match;
+            });
+            
+            console.log(matched_investments);
+            resolve(matched_investments);
+        }))
         .catch((error) => {
             reject(`Error: ${error}`);
         });
+        // axios.get(`${URL}/investment`)
+        // .then(
+        //     (result) => {
+        //         let all_investments = result.data.contents;
+        //         let matched_investments = all_investments.filter((investment) => investment.investorAddress == address);
+
+        //         console.log(matched_investments);
+        //         resolve(matched_investments);
+        //     })
+        // .catch((error) => {
+        //     reject(`Error: ${error}`);
+        // });
     });
 }
 
