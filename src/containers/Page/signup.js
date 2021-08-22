@@ -16,6 +16,8 @@ const { login } = authAction;
 class SignUp extends React.Component {
   state = {
     redirectToReferrer: false,
+    email: '',
+    password: '',
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -30,6 +32,15 @@ class SignUp extends React.Component {
     login();
     this.props.history.push('/dashboard');
   };
+
+  signupWithEmail = () => {
+    Firebase
+      .login("email_sign_up", {email: this.state.email, password: this.state.password})
+      .then(userCredential => {
+        console.log(userCredential);
+        this.props.history.replace('./dashboard');
+      });  
+  }
   render() {
     return (
       <SignUpStyleWrapper className="isoSignUpPage">
@@ -52,11 +63,26 @@ class SignUp extends React.Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" placeholder="Email" />
+                <Input 
+                  size="large" 
+                  placeholder="Email" 
+                  value={this.state.email}
+                  onChange={event => {
+                    this.setState({ email: event.target.value });
+                  }}
+                />
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
+                <Input 
+                  size="large" 
+                  type="password" 
+                  placeholder="Password" 
+                  value={this.state.password}
+                  onChange={event => {
+                    this.setState({ password: event.target.value });
+                  }}
+                />
               </div>
 
               <div className="isoInputWrapper">
@@ -74,7 +100,7 @@ class SignUp extends React.Component {
               </div>
 
               <div className="isoInputWrapper">
-                <Button type="primary">
+                <Button type="primary" onClick={this.signupWithEmail}>
                   <IntlMessages id="page.signUpButton" />
                 </Button>
               </div>

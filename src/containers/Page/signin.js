@@ -8,6 +8,8 @@ import authAction from '../../redux/auth/actions';
 import Auth0 from '../../helpers/auth0';
 import Firebase from '../../helpers/firebase';
 import FirebaseLogin from '../../components/firebase';
+import FacebookLogin from '../../components/facebook';
+import GoogleLogin from '../../components/google';
 import IntlMessages from '../../components/utility/intlMessages';
 import SignInStyleWrapper from './signin.style';
 
@@ -16,7 +18,17 @@ const { login } = authAction;
 class SignIn extends Component {
   state = {
     redirectToReferrer: false,
+    email: '',
+    password: '',
+    actionCodeSettings: {
+      // URL you want to redirect back to. The domain (www.example.com) for this
+      // URL must be in the authorized domains list in the Firebase Console.
+      url: 'http://localhost:3000/dashboard',
+      // This must be true.
+      handleCodeInApp: true,
+    }
   };
+
   componentWillReceiveProps(nextProps) {
     if (
       this.props.isLoggedIn !== nextProps.isLoggedIn &&
@@ -24,12 +36,23 @@ class SignIn extends Component {
     ) {
       this.setState({ redirectToReferrer: true });
     }
-  }
+  };
+
   handleLogin = () => {
     const { login } = this.props;
     login();
     this.props.history.push('/dashboard');
   };
+
+  loginWithEmail = () => {
+    Firebase
+      .login("email_sign_in", {email: this.state.email, password: this.state.password})
+      .then(userCredential => {
+        console.log(userCredential);
+        window.localStorage.setItem('emailForSignIn', this.state.email);
+        this.props.history.replace('./dashboard');
+      });  
+  }
   render() {
     const from = { pathname: '/dashboard' };
     const { redirectToReferrer } = this.state;
@@ -49,18 +72,33 @@ class SignIn extends Component {
 
             <div className="isoSignInForm">
               <div className="isoInputWrapper">
-                <Input size="large" placeholder="Username" />
+                <Input 
+                  size="large" 
+                  placeholder="Email" 
+                  value={this.state.email}
+                  onChange={event => {
+                    this.setState({ email: event.target.value });
+                  }}
+                />
               </div>
 
               <div className="isoInputWrapper">
-                <Input size="large" type="password" placeholder="Password" />
+                <Input 
+                  size="large" 
+                  type="password" 
+                  placeholder="Password" 
+                  value={this.state.password}
+                  onChange={event => {
+                    this.setState({ password: event.target.value });
+                  }}
+                />
               </div>
 
               <div className="isoInputWrapper isoLeftRightComponent">
                 <Checkbox>
                   <IntlMessages id="page.signInRememberMe" />
                 </Checkbox>
-                <Button type="primary" onClick={this.handleLogin}>
+                <Button type="primary" onClick={this.loginWithEmail}>
                   <IntlMessages id="page.signInButton" />
                 </Button>
               </div>
@@ -70,14 +108,11 @@ class SignIn extends Component {
               </p>
 
               <div className="isoInputWrapper isoOtherLogin">
-                <Button onClick={this.handleLogin} type="primary btnFacebook">
+                {/* <Button onClick={this.handleLogin} type="primary btnFacebook">
                   <IntlMessages id="page.signInFacebook" />
-                </Button>
-                <Button onClick={this.handleLogin} type="primary btnGooglePlus">
-                  <IntlMessages id="page.signInGooglePlus" />
-                </Button>
+                </Button> */}
 
-                {Auth0.isValid &&
+                {/* {Auth0.isValid &&
                   <Button
                     onClick={() => {
                       Auth0.login(this.handleLogin);
@@ -85,9 +120,11 @@ class SignIn extends Component {
                     type="primary btnAuthZero"
                   >
                     <IntlMessages id="page.signInAuth0" />
-                  </Button>}
+                  </Button>} */}
 
-                {Firebase.isValid && <FirebaseLogin login={this.handleLogin} />}
+                {Firebase.isValid && <FacebookLogin login={this.handleLogin} />}
+                {Firebase.isValid && <GoogleLogin login={this.handleLogin} />}
+                {/* {Firebase.isValid && <FirebaseLogin login={this.handleLogin} />} */}
               </div>
               <div className="isoCenterComponent isoHelperWrapper">
                 <Link to="/forgotpassword" className="isoForgotPass">

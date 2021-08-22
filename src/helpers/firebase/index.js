@@ -19,22 +19,56 @@ class FirebaseHelper {
     this.isAuthenticated = this.isAuthenticated.bind(this);
   }
   login(provider, info) {
-    switch (provider) {
-      case this.EMAIL:
-        return firebaseAuth().signInWithEmailAndPassword(
-          info.email,
-          info.password
-        );
-      case this.FACEBOOK:
-        return firebaseAuth().FacebookAuthProvider();
-      case this.GOOGLE:
-        return firebaseAuth().GoogleAuthProvider();
-      case this.GITHUB:
-        return firebaseAuth().GithubAuthProvider();
-      case this.TWITTER:
-        return firebaseAuth().TwitterAuthProvider();
-      default:
+    if(provider == "google") {
+      let p = new firebaseAuth.GoogleAuthProvider();
+      p.addScope('profile');
+      p.addScope('email');
+      console.log(p);
+      let r = firebaseAuth().signInWithPopup(p);
+      return r;
+    } 
+
+    if(provider == 'facebook') {
+      let p = new firebaseAuth.FacebookAuthProvider();
+      p.addScope('user_birthday');
+      console.log(p);
+      let r = firebaseAuth().signInWithPopup(p);
+      return r;
     }
+
+    if(provider == 'email_sign_in') {
+      let p = new firebaseAuth.EmailAuthProvider();
+      console.log(p);
+      let r = firebaseAuth().signInWithEmailAndPassword(info.email, info.password);
+      return r;
+    }
+
+    if(provider == 'email_sign_up') {
+      let p = new firebaseAuth.EmailAuthProvider();
+      console.log(p);
+      let r = firebaseAuth().createUserWithEmailAndPassword(info.email, info.password);
+      return r;
+    }
+    // switch (provider) {
+    //   case "google":
+    //     let provider = new firebaseAuth.GoogleAuthProvider();
+    //     provider.addScope('profile');
+    //     provider.addScope('email');
+    //     console.log(provider);
+    //     return firebaseAuth().signInWithPopup(provider);
+    //   case this.EMAIL:
+    //     return firebaseAuth().signInWithEmailAndPassword(
+    //       info.email,
+    //       info.password
+    //     );
+    //   case this.FACEBOOK:
+    //     return firebaseAuth().FacebookAuthProvider();
+    //   case this.GITHUB:
+    //     return firebaseAuth().GithubAuthProvider();
+    //   case this.TWITTER:
+    //     return firebaseAuth().TwitterAuthProvider();
+    //   default:
+    // }
   }
   logout() {
     return firebaseAuth().signOut();

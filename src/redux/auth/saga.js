@@ -21,6 +21,7 @@ export function* loginRequest() {
 
 export function* loginSuccess() {
   yield takeEvery(actions.LOGIN_SUCCESS, function*(payload) {
+    console.log(`login success: ${payload.token}`);
     yield localStorage.setItem('id_token', payload.token);
   });
 }

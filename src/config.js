@@ -48,12 +48,13 @@ const Auth0Config = {
   },
 };
 const firebaseConfig = {
-  apiKey: '',
-  authDomain: '',
+  apiKey: 'AIzaSyAZu4PAXMvrynZS59j_cds37bBnRQku3KE',
+  authDomain: 'crowdfund-06072021.firebaseapp.com',
   databaseURL: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
+  projectId: 'crowdfund-06072021',
+  storageBucket: 'crowdfund-06072021.appspot.com',
+  messagingSenderId: '178550018499',
+  appId: "1:178550018499:web:c3a01253713de04d626d76",
 };
 const googleConfig = {
   apiKey: '', //

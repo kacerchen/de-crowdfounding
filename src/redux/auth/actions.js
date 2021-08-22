@@ -9,5 +9,13 @@ const authActons = {
   logout: () => ({
     type: authActons.LOGOUT,
   }),
+  // login: (credential) => {
+  //   return (dispatch, getState) => {
+  //     dispatch({
+  //       type: authActons.LOGIN_REQUEST,
+  //       credential
+  //     });
+  //   };
+  // }
 };
 export default authActons;

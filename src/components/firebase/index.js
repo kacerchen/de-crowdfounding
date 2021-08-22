@@ -4,6 +4,7 @@ import Input from '../uielements/input';
 import Modal from '../feedback/modal';
 import { notification } from '../index';
 import Firebase from '../../helpers/firebase/index';
+import history from '../../helpers/auth0/history';
 
 export default class extends Component {
   state = {
@@ -33,36 +34,38 @@ export default class extends Component {
     });
     const self = this;
     let isError = false;
-    Firebase.login(Firebase.EMAIL, { email, password })
-      .catch(result => {
-        const message =
-          result && result.message ? result.message : 'Sorry Some error occurs';
-        notification('error', message);
-        self.setState({
-          confirmLoading: false
-        });
-        isError = true;
-      })
+    Firebase.login("facebook", { email, password })
+      // .catch(result => {
+      //   const message =
+      //     result && result.message ? result.message : 'Sorry Some error occurs';
+      //   notification('error', message);
+      //   self.setState({
+      //     confirmLoading: false
+      //   });
+      //   isError = true;
+      // })
       .then(result => {
-        if (isError) {
-          return;
-        }
-        if (!result || result.message) {
-          const message =
-            result && result.message
-              ? result.message
-              : 'Sorry Some error occurs';
-          notification('error', message);
-          self.setState({
-            confirmLoading: false
-          });
-        } else {
-          self.setState({
-            visible: false,
-            confirmLoading: false
-          });
-          this.props.login();
-        }
+        console.log(result);
+        history.replace('./dashboard');
+        // if (isError) {
+        //   return;
+        // }
+        // if (!result || result.message) {
+        //   const message =
+        //     result && result.message
+        //       ? result.message
+        //       : 'Sorry Some error occurs';
+        //   notification('error', message);
+        //   self.setState({
+        //     confirmLoading: false
+        //   });
+        // } else {
+        //   self.setState({
+        //     visible: false,
+        //     confirmLoading: false
+        //   });
+        //   this.props.login();
+        // }
       });
   };
   resetPassword = () => {
