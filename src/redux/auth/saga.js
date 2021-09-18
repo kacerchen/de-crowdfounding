@@ -6,12 +6,14 @@ import actions from './actions';
 const fakeApiCall = true; // auth0 or express JWT
 
 export function* loginRequest() {
-  yield takeEvery('LOGIN_REQUEST', function*() {
-    if (fakeApiCall) {
+  yield takeEvery('LOGIN_REQUEST', function*(action) {
+    console.log(action);
+    
+    if (action.authResponse) {
       yield put({
         type: actions.LOGIN_SUCCESS,
-        token: 'secret token',
-        profile: 'Profile'
+        token: action.authResponse.credential,
+        profile: action.authResponse.additionalUserInfo.profile
       });
     } else {
       yield put({ type: actions.LOGIN_ERROR });
@@ -22,7 +24,8 @@ export function* loginRequest() {
 export function* loginSuccess() {
   yield takeEvery(actions.LOGIN_SUCCESS, function*(payload) {
     console.log(`login success: ${payload.token}`);
-    yield localStorage.setItem('id_token', payload.token);
+    yield localStorage.setItem('id_token', payload.token.accessToken);
+    yield localStorage.setItem('profile', JSON.stringify(payload.profile));
   });
 }
 

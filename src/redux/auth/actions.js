@@ -3,19 +3,19 @@ const authActons = {
   LOGOUT: 'LOGOUT',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_ERROR: 'LOGIN_ERROR',
-  login: () => ({
-    type: authActons.LOGIN_REQUEST,
-  }),
+  // login: () => ({
+  //   type: authActons.LOGIN_REQUEST,
+  // }),
   logout: () => ({
     type: authActons.LOGOUT,
   }),
-  // login: (credential) => {
-  //   return (dispatch, getState) => {
-  //     dispatch({
-  //       type: authActons.LOGIN_REQUEST,
-  //       credential
-  //     });
-  //   };
-  // }
+  login: (authResponse) => {
+    return (dispatch, getState) => {
+      dispatch({
+        type: authActons.LOGIN_REQUEST,
+        authResponse
+      });
+    };
+  }
 };
 export default authActons;

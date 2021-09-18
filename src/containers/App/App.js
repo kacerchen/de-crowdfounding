@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Layout, LocaleProvider } from 'antd';
+import { Layout, ConfigProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
 import { Debounce } from 'react-throttle';
 import WindowResizeListener from 'react-window-size-listener';
@@ -26,7 +26,7 @@ export class App extends Component {
     const { locale, selectedTheme } = this.props;
     const currentAppLocale = AppLocale[locale];
     return (
-      <LocaleProvider locale={currentAppLocale.antd}>
+      <ConfigProvider locale={currentAppLocale.antd}>
         <IntlProvider
           locale={currentAppLocale.locale}
           messages={currentAppLocale.messages}>
@@ -74,7 +74,7 @@ export class App extends Component {
             </AppHolder>
           </ThemeProvider>
         </IntlProvider>
-      </LocaleProvider>
+      </ConfigProvider>
     );
   }
 }

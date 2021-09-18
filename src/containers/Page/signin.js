@@ -38,10 +38,11 @@ class SignIn extends Component {
     }
   };
 
-  handleLogin = () => {
+  handleLogin = (auth_response) => {
     const { login } = this.props;
-    login();
-    this.props.history.push('/dashboard');
+    login(auth_response);
+    this.props.history.replace('./dashboard');
+    // this.props.history.push('/dashboard');
   };
 
   loginWithEmail = () => {
@@ -50,7 +51,7 @@ class SignIn extends Component {
       .then(userCredential => {
         console.log(userCredential);
         window.localStorage.setItem('emailForSignIn', this.state.email);
-        this.props.history.replace('./dashboard');
+        // this.props.history.replace('./dashboard');
       });  
   }
   render() {

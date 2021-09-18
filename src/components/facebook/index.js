@@ -31,7 +31,18 @@ export default class extends Component {
       .login("facebook", {})
       .then(result => {
         console.log(result);
-        history.replace('./dashboard');
+        /** @type {firebase.auth.OAuthCredential} */
+        var credential = result.credential;
+
+        // The signed-in user info.
+        var user = result.user;
+        console.log(user);
+
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        var accessToken = credential.accessToken;
+        console.log(accessToken);
+
+        this.props.login(result);
       });
   };
   resetPassword = () => {

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { store, history } from './redux/store';
 import PublicRoutes from './router';
 import { ThemeProvider } from 'styled-components';
-import { LocaleProvider } from 'antd';
+import { ConfigProvider } from 'antd';
 import { IntlProvider } from 'react-intl';
 import themes from './config/themes';
 import AppLocale from './languageProvider';
@@ -18,7 +18,7 @@ const currentAppLocale =
   AppLocale[getCurrentLanguage(config.defaultLanguage || 'english').locale];
 
 const DashApp = () => (
-  <LocaleProvider locale={currentAppLocale.antd}>
+  <ConfigProvider locale={currentAppLocale.antd}>
     <IntlProvider
       locale={currentAppLocale.locale}
       messages={currentAppLocale.messages}
@@ -31,7 +31,7 @@ const DashApp = () => (
         </DashAppHolder>
       </ThemeProvider>
     </IntlProvider>
-  </LocaleProvider>
+  </ConfigProvider>
 );
 
 export default DashApp;

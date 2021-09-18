@@ -33,7 +33,7 @@ export default class extends Component {
       .login("google", {})
       .then(result => {
         console.log(result);
-        history.replace('./dashboard');
+        this.props.login(result);
       });
   };
   resetPassword = () => {

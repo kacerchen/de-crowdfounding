@@ -30,7 +30,7 @@ class FirebaseHelper {
 
     if(provider == 'facebook') {
       let p = new firebaseAuth.FacebookAuthProvider();
-      p.addScope('user_birthday');
+      p.addScope('public_profile');
       console.log(p);
       let r = firebaseAuth().signInWithPopup(p);
       return r;
